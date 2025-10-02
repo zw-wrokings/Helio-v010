@@ -1,4 +1,4 @@
-import { MessageSquare, MoreVertical, Edit2, Trash2, Pin, Check, X } from 'lucide-react';
+import { MessageSquare, MoveVertical as MoreVertical, CreditCard as Edit2, Trash2, Pin, Check, X } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Link, useLocation } from 'react-router-dom';
 import { useChat } from '../../contexts/ChatContext';
