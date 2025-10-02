@@ -10,15 +10,15 @@ interface CustomSliderProps {
 
 const CustomSlider = ({ isOpen, children, className }: CustomSliderProps) => {
   return (
-    <div className={cn("flex-1 overflow-hidden transition-all duration-300 ease-out", className)}>
+    <div className={cn("flex-1 overflow-hidden transition-all duration-300 ease-out w-full", className)}>
       {isOpen ? (
-        <ScrollArea className="h-full animate-fade-in">
-          <div className="h-full">
+        <ScrollArea className="h-full w-full animate-fade-in">
+          <div className="h-full w-full">
             {children}
           </div>
         </ScrollArea>
       ) : (
-        <div className="h-full overflow-hidden animate-fade-in">
+        <div className="h-full w-full overflow-hidden animate-fade-in">
           {children}
         </div>
       )}
