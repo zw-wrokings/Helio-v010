@@ -240,7 +240,7 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
                    hover:bg-white/10
                    rounded-lg transition-all duration-200
                    relative border border-transparent
-                   text-sm px-3 py-[10px] h-[38px] truncate pr-6 ml-8
+                   text-sm px-3 py-[10px] h-[38px] pr-10 ml-8 overflow-hidden
                    ${location.pathname === `/chat/${chat.id}` ? 'bg-white/10 border-[#4b4b4b]' : ''}
                  `} title={chat.title}>
                  <MessageCircle className={`
@@ -248,10 +248,10 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
                    hover:drop-shadow-[0_6px_12px_rgba(255,255,255,1)]
                    hover:filter hover:brightness-150
                    transition-all duration-200
-                   w-5 h-5
+                   w-5 h-5 flex-shrink-0
                    ${location.pathname === `/chat/${chat.id}` ? 'brightness-150' : ''}
                  `} />
-                <span className="font-nunito text-sm font-medium truncate">
+                <span className="font-nunito text-sm font-medium truncate overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
                   {chat.title}
                 </span>
               </Link>
@@ -451,14 +451,14 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
               <nav className="px-3 space-y-2 mb-4">
                 {pagesLinks.map((link, index) => (
                   <div key={index} className="relative z-10">
-                    <Link 
-                      to={link.href} 
+                    <Link
+                      to={link.href}
                       className={`
                         flex items-center gap-3 text-white font-nunito
                         hover:bg-white/10
                         rounded-lg transition-all duration-200
                         relative border border-transparent
-                        text-sm px-3 py-[10px] h-[38px] truncate ml-8
+                        text-sm px-3 py-[10px] h-[38px] ml-8 overflow-hidden
                         ${isActive(link.href) ? 'bg-white/10 border-[#4b4b4b]' : ''}
                       `}
                     >
@@ -467,10 +467,10 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
                         hover:drop-shadow-[0_6px_12px_rgba(255,255,255,1)]
                         hover:filter hover:brightness-150
                         transition-all duration-200
-                        w-5 h-5
+                        w-5 h-5 flex-shrink-0
                         ${isActive(link.href) ? 'brightness-150' : ''}
                       `} />
-                      <span className="font-nunito text-sm font-medium truncate">
+                      <span className="font-nunito text-sm font-medium truncate overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
                         {link.name}
                       </span>
                     </Link>
@@ -574,14 +574,14 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
               <nav className="px-3 space-y-2 mb-4">
                 {moreLinks.map((link, index) => (
                   <div key={index} className="relative z-10">
-                    <Link 
-                      to={link.href} 
+                    <Link
+                      to={link.href}
                       className={`
                         flex items-center gap-3 text-white font-nunito
                         hover:bg-white/10
                         rounded-lg transition-all duration-200
                         relative border border-transparent
-                        text-sm px-3 py-[10px] h-[38px] truncate ml-8
+                        text-sm px-3 py-[10px] h-[38px] ml-8 overflow-hidden
                         ${isActive(link.href) ? 'bg-white/10 border-[#4b4b4b]' : ''}
                       `}
                     >
@@ -590,10 +590,10 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
                         hover:drop-shadow-[0_6px_12px_rgba(255,255,255,1)]
                         hover:filter hover:brightness-150
                         transition-all duration-200
-                        w-5 h-5
+                        w-5 h-5 flex-shrink-0
                         ${isActive(link.href) ? 'brightness-150' : ''}
                       `} />
-                      <span className="font-nunito text-sm font-medium truncate">
+                      <span className="font-nunito text-sm font-medium truncate overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
                         {link.name}
                       </span>
                     </Link>
