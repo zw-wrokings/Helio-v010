@@ -17,11 +17,11 @@ const DarkSidebar = () => {
   return (
     <div className={`
         fixed left-0 top-0 h-screen bg-[#161618] transition-all duration-500 ease-out z-50
-        border-r border-[#1C1C1C] flex flex-col overflow-hidden
+        border-r border-[#1C1C1C] flex flex-col
         ${isOpen ? 'w-[260px]' : 'w-[70px]'}
       `}>
 
-      <CustomSlider isOpen={isOpen} className="flex-1 w-full">
+      <CustomSlider isOpen={isOpen} className="flex-1 w-full overflow-hidden">
         <SidebarLogo isOpen={isOpen} />
         <SidebarSearch isOpen={isOpen} />
         <SidebarNavigation isOpen={isOpen} setIsOpen={setIsOpen} />

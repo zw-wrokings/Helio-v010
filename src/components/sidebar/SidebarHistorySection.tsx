@@ -133,7 +133,7 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
                   hover:bg-transparent hover:border hover:border-[#4b4b4b]
                   rounded-lg transition-all duration-200
                   relative border border-transparent
-                  text-sm px-3 py-[10px] h-[38px] pr-10 overflow-hidden
+                  text-sm px-3 py-[10px] h-[38px] pr-10 max-w-full
                   ${location.pathname === `/chat/${chat.id}` ? 'bg-white/10 border-[#4b4b4b]' : ''}
                 `}
                 title={chat.title}
@@ -146,7 +146,7 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
                   w-5 h-5 flex-shrink-0
                   ${location.pathname === `/chat/${chat.id}` ? 'brightness-150' : ''}
                 `} />
-                <span className="font-nunito text-sm font-medium truncate overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
+                <span className="font-nunito text-sm font-medium truncate flex-1 min-w-0 block overflow-hidden">
                   {chat.title}
                 </span>
               </Link>
