@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TasksHeader from '@/components/tasks/TasksHeader';
 import DateSelector from '@/components/tasks/DateSelector';
-import { Plus, CheckCircle, ChevronRight, MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, MapPin, Clock } from 'lucide-react';
+import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
