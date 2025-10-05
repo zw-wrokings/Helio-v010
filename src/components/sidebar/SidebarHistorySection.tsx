@@ -133,11 +133,11 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
                   hover:bg-transparent hover:border hover:border-[#4b4b4b]
                   rounded-lg transition-all duration-200
                   relative border border-transparent
-                  text-sm px-3 py-[10px] h-[38px] pr-10 w-full
+                  text-sm px-3 py-[10px] h-[38px] pr-10
                   ${location.pathname === `/chat/${chat.id}` ? 'bg-white/10 border-[#4b4b4b]' : ''}
                 `}
                 title={chat.title}
-                style={{ maxWidth: '100%', minWidth: 0 }}
+                style={{ maxWidth: '190px', minWidth: 0 }}
               >
                 <MessageSquare className={`
                   text-white drop-shadow-[0_4px_8px_rgba(255,255,255,0.3)]
