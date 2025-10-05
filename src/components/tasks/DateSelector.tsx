@@ -51,24 +51,24 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
       </PopoverTrigger>
       <PopoverContent
         className="w-[280px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
-        align="start"
-        side="right"
+        align="center"
+        side="top"
         sideOffset={8}
       >
         <div className="flex flex-col h-full">
           {/* Date Input Field */}
-          <div className="p-3 border-b border-[#414141]">
+          <div className="p-3">
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Select a date"
-              className="w-full bg-[#252525] text-white text-sm px-3 py-2 rounded-[8px] outline-none focus:ring-1 focus:ring-[#525252] placeholder-gray-500 border border-transparent"
+              placeholder="type a date"
+              className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
             />
           </div>
 
           {/* Quick Select Buttons */}
-          <div className="p-3 border-b border-[#414141] grid grid-cols-2 gap-2">
+          <div className="p-3 grid grid-cols-2 gap-2">
             <Button
               variant="ghost"
               size="sm"
@@ -114,7 +114,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
           </div>
 
           {/* Time and Repeat Buttons */}
-          <div className="p-3 border-t border-[#414141] grid grid-cols-2 gap-2">
+          <div className="p-3 grid grid-cols-2 gap-2">
             <Button
               variant="ghost"
               size="sm"
