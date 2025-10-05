@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Calendar as CalendarIcon, Clock, Repeat } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, Repeat, Sun, Sunrise, CalendarDays, CalendarPlus } from 'lucide-react';
 import { format, addDays, nextSaturday } from "date-fns";
 import { cn } from "@/lib/utils";
 
@@ -50,8 +50,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[280px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
-        align="center"
+        className="w-[300px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
+        align="start"
         side="right"
         sideOffset={8}
       >
@@ -73,32 +73,36 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
               variant="ghost"
               size="sm"
               onClick={() => handleQuickSelect(0)}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[8px] h-9 text-xs"
+              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
             >
+              <Sun className="h-3.5 w-3.5" />
               Today
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleQuickSelect(1)}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[8px] h-9 text-xs"
+              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
             >
+              <Sunrise className="h-3.5 w-3.5" />
               Tomorrow
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleQuickSelect(getNextWeekend())}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[8px] h-9 text-xs"
+              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
             >
+              <CalendarDays className="h-3.5 w-3.5" />
               Next Weekend
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleQuickSelect(2)}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[8px] h-9 text-xs"
+              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
             >
+              <CalendarPlus className="h-3.5 w-3.5" />
               After Day
             </Button>
           </div>
@@ -118,7 +122,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
             <Button
               variant="ghost"
               size="sm"
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[8px] h-9 text-xs flex items-center justify-center gap-2"
+              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
             >
               <Clock className="h-3.5 w-3.5" />
               Time
@@ -126,7 +130,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
             <Button
               variant="ghost"
               size="sm"
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[8px] h-9 text-xs flex items-center justify-center gap-2"
+              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
             >
               <Repeat className="h-3.5 w-3.5" />
               Repeat
