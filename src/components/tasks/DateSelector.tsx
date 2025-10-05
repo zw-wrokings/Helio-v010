@@ -50,9 +50,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[280px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        className="w-[280px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
         align="center"
-        side="bottom"
+        side="right"
         sideOffset={8}
       >
         <div className="flex flex-col h-full">
