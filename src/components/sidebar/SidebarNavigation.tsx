@@ -427,7 +427,7 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
                 <button
                   onClick={() => setShowPages(!showPages)}
                   className="flex items-center gap-3 text-white font-nunito hover:bg-white/10 rounded-lg transition-all duration-200 relative border border-transparent text-sm px-3 py-[10px] h-[38px] group"
-                  style={{ maxWidth: '230px' }}
+                  style={{ width: '190px' }}
                 >
                   <div className="relative w-5 h-5">
                     {/* Pages icon - visible by default, hidden on hover */}
@@ -490,7 +490,7 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
           <nav className="px-3 mt-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <button onClick={() => setShowHistory(!showHistory)} className="flex items-center gap-3 text-white font-nunito hover:bg-white/10 rounded-lg transition-all duration-200 relative border border-transparent text-sm px-3 py-[10px] h-[38px] group" style={{ maxWidth: '230px' }}>
+                <button onClick={() => setShowHistory(!showHistory)} className="flex items-center gap-3 text-white font-nunito hover:bg-white/10 rounded-lg transition-all duration-200 relative border border-transparent text-sm px-3 py-[10px] h-[38px] group" style={{ width: '190px' }}>
                   <div className="relative w-5 h-5">
                     {/* History icon - visible by default, hidden on hover when there are chats */}
                     <History className={`absolute inset-0 text-white drop-shadow-[0_4px_8px_rgba(255,255,255,0.3)] hover:drop-shadow-[0_6px_12px_rgba(255,255,255,1)] hover:filter hover:brightness-150 transition-all duration-200 w-5 h-5 ${chats.length > 0 ? 'group-hover:opacity-0 group-hover:scale-75' : ''}`} />
@@ -553,7 +553,7 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
                 <button
                   onClick={() => setShowMore(!showMore)}
                   className="flex items-center gap-3 text-white font-nunito hover:bg-white/10 rounded-lg transition-all duration-200 relative border border-transparent text-sm px-3 py-[10px] h-[38px] group"
-                  style={{ maxWidth: '230px' }}
+                  style={{ width: '190px' }}
                 >
                   <div className="relative w-5 h-5">
                     {/* @ icon - visible by default, hidden on hover */}
