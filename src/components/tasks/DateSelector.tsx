@@ -52,9 +52,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
       <PopoverContent
         className="w-[300px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
         align="start"
-        alignOffset={-45}
         side="right"
-        sideOffset={50}
+        sideOffset={8}
       >
         <div className="flex flex-col h-full">
           {/* Date Input Field */}
