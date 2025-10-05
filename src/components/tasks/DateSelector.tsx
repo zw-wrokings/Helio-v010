@@ -51,24 +51,20 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
       </PopoverTrigger>
       <PopoverContent
         className="w-[280px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
-        align="start"
+        align="center"
         side="right"
         sideOffset={8}
       >
         <div className="flex flex-col h-full">
           {/* Date Input Field */}
-          <div className="p-3 border-b border-[#414141]">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Select a date"
-              className="w-full bg-[#252525] text-white text-sm px-3 py-2 rounded-[8px] outline-none focus:ring-1 focus:ring-[#525252] placeholder-gray-500 border border-transparent"
-            />
+          <div className="p-3">
+            <div className="w-full text-gray-400 text-sm px-3 py-2">
+              {inputValue || "Select a date"}
+            </div>
           </div>
 
           {/* Quick Select Buttons */}
-          <div className="p-3 border-b border-[#414141] grid grid-cols-2 gap-2">
+          <div className="px-3 pb-3 grid grid-cols-2 gap-2">
             <Button
               variant="ghost"
               size="sm"
@@ -104,17 +100,20 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
           </div>
 
           {/* Calendar */}
-          <div className="flex-1 overflow-auto p-3">
+          <div className="flex-1 overflow-auto px-3">
             <Calendar
               mode="single"
               selected={selectedDate}
               onSelect={handleCalendarSelect}
               className="rounded-[8px]"
+              captionLayout="dropdown-buttons"
+              fromYear={1900}
+              toYear={2100}
             />
           </div>
 
           {/* Time and Repeat Buttons */}
-          <div className="p-3 border-t border-[#414141] grid grid-cols-2 gap-2">
+          <div className="p-3 grid grid-cols-2 gap-2">
             <Button
               variant="ghost"
               size="sm"
