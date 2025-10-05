@@ -16,7 +16,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [inputValue, setInputValue] = useState(
     selectedDate ? format(selectedDate, "MMM dd, yyyy") : ""
   );
-  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleQuickSelect = (days: number | Date) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
@@ -35,14 +34,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     return nextSaturday(new Date());
   };
 
-  React.useEffect(() => {
-    if (open && inputRef.current) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
-    }
-  }, [open]);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -59,21 +50,20 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[280px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
+        className="w-[280px] h-[600px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         align="center"
-        side="top"
+        side="bottom"
         sideOffset={8}
       >
         <div className="flex flex-col h-full">
           {/* Date Input Field */}
           <div className="p-3">
             <input
-              ref={inputRef}
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="type a date"
-              className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-white border-none"
+              className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
             />
           </div>
 
