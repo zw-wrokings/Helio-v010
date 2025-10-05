@@ -93,7 +93,7 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
       <ContextMenuTrigger asChild>
         <div className="relative group">
           {editingChatId === chat.id ? (
-            <div className="flex items-center gap-1 text-white font-nunito rounded-lg border border-[#4b4b4b] bg-white/10 text-sm px-3 py-[10px] h-[38px]">
+            <div className="flex items-center gap-1 text-white font-nunito rounded-lg border border-[#4b4b4b] bg-white/10 text-sm px-3 py-[10px] h-[38px] overflow-hidden" style={{ maxWidth: '190px' }}>
               <MessageSquare className="w-5 h-5 text-white drop-shadow-[0_4px_8px_rgba(255,255,255,0.3)] flex-shrink-0" />
               <input
                 type="text"

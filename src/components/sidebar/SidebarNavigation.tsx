@@ -213,7 +213,7 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
   const renderChatItem = (chat: any) => <ContextMenu key={chat.id}>
       <ContextMenuTrigger asChild>
         <div className="relative group">
-           {editingChatId === chat.id ? <div className="flex items-center gap-1 text-white font-nunito rounded-lg border border-[#4b4b4b] bg-white/10 text-sm px-3 py-[10px] h-[38px] ml-8">
+           {editingChatId === chat.id ? <div className="flex items-center gap-1 text-white font-nunito rounded-lg border border-[#4b4b4b] bg-white/10 text-sm px-3 py-[10px] h-[38px] ml-8 overflow-hidden" style={{ maxWidth: '190px' }}>
                 <MessageCircle className="w-5 h-5 text-white drop-shadow-[0_4px_8px_rgba(255,255,255,0.3)] flex-shrink-0" />
                <input type="text" value={editingTitle} onChange={e => setEditingTitle(e.target.value)} className="flex-1 bg-transparent border-none outline-none text-sm font-medium text-white min-w-0" autoFocus onKeyDown={e => {
             if (e.key === 'Enter') {
@@ -424,10 +424,10 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
           <nav className="px-3 mt-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <button 
+                <button
                   onClick={() => setShowPages(!showPages)}
                   className="flex items-center gap-3 text-white font-nunito hover:bg-white/10 rounded-lg transition-all duration-200 relative border border-transparent text-sm px-3 py-[10px] h-[38px] group"
-                  style={{ maxWidth: '230px' }}
+                  style={{ width: '190px' }}
                 >
                   <div className="relative w-5 h-5">
                     {/* Pages icon - visible by default, hidden on hover */}
@@ -490,7 +490,7 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
           <nav className="px-3 mt-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <button onClick={() => setShowHistory(!showHistory)} className="flex items-center gap-3 text-white font-nunito hover:bg-white/10 rounded-lg transition-all duration-200 relative border border-transparent text-sm px-3 py-[10px] h-[38px] group" style={{ maxWidth: '230px' }}>
+                <button onClick={() => setShowHistory(!showHistory)} className="flex items-center gap-3 text-white font-nunito hover:bg-white/10 rounded-lg transition-all duration-200 relative border border-transparent text-sm px-3 py-[10px] h-[38px] group" style={{ width: '190px' }}>
                   <div className="relative w-5 h-5">
                     {/* History icon - visible by default, hidden on hover when there are chats */}
                     <History className={`absolute inset-0 text-white drop-shadow-[0_4px_8px_rgba(255,255,255,0.3)] hover:drop-shadow-[0_6px_12px_rgba(255,255,255,1)] hover:filter hover:brightness-150 transition-all duration-200 w-5 h-5 ${chats.length > 0 ? 'group-hover:opacity-0 group-hover:scale-75' : ''}`} />
@@ -550,10 +550,10 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
           <nav className="px-3 mt-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <button 
+                <button
                   onClick={() => setShowMore(!showMore)}
                   className="flex items-center gap-3 text-white font-nunito hover:bg-white/10 rounded-lg transition-all duration-200 relative border border-transparent text-sm px-3 py-[10px] h-[38px] group"
-                  style={{ maxWidth: '230px' }}
+                  style={{ width: '190px' }}
                 >
                   <div className="relative w-5 h-5">
                     {/* @ icon - visible by default, hidden on hover */}
