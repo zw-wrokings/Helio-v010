@@ -133,10 +133,11 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
                   hover:bg-transparent hover:border hover:border-[#4b4b4b]
                   rounded-lg transition-all duration-200
                   relative border border-transparent
-                  text-sm px-3 py-[10px] h-[38px] pr-10 max-w-full
+                  text-sm px-3 py-[10px] h-[38px] pr-10 w-full
                   ${location.pathname === `/chat/${chat.id}` ? 'bg-white/10 border-[#4b4b4b]' : ''}
                 `}
                 title={chat.title}
+                style={{ maxWidth: '100%', minWidth: 0 }}
               >
                 <MessageSquare className={`
                   text-white drop-shadow-[0_4px_8px_rgba(255,255,255,0.3)]
@@ -146,7 +147,7 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
                   w-5 h-5 flex-shrink-0
                   ${location.pathname === `/chat/${chat.id}` ? 'brightness-150' : ''}
                 `} />
-                <span className="font-nunito text-sm font-medium truncate flex-1 min-w-0 block overflow-hidden">
+                <span className="font-nunito text-sm font-medium truncate block overflow-hidden" style={{ flex: '1 1 0', minWidth: 0 }}>
                   {chat.title}
                 </span>
               </Link>
@@ -245,7 +246,7 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
               Pinned
             </h3>
           </div>
-          <nav className="px-3 space-y-2 mb-4">
+          <nav className="px-3 space-y-2 mb-4" style={{ overflow: 'hidden' }}>
             {pinnedChats.map(renderChatItem)}
           </nav>
         </>
@@ -256,7 +257,7 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
           History
         </h3>
       </div>
-      <nav className="px-3 space-y-2">
+      <nav className="px-3 space-y-2" style={{ overflow: 'hidden' }}>
         {unpinnedChats.map(renderChatItem)}
       </nav>
     </>

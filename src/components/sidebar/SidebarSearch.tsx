@@ -8,8 +8,8 @@ interface SidebarSearchProps {
 
 const SidebarSearch = ({ isOpen }: SidebarSearchProps) => {
   return (
-    <div className={`p-4 ${!isOpen ? 'mt-4' : ''}`}>
-      <div className="relative w-full max-w-full">
+    <div className={`px-4 py-4 ${!isOpen ? 'mt-4' : ''}`}>
+      <div className="relative flex-shrink-0">
         <Search className={`
             absolute text-white transition-all duration-300
             ${!isOpen
@@ -25,8 +25,9 @@ const SidebarSearch = ({ isOpen }: SidebarSearchProps) => {
               bg-[#1b1b1b] border border-[#414141] text-white placeholder-gray-400 pl-12 h-10
               hover:bg-[#252525]
               focus:border-[#414141] focus:bg-[#252525]
-              rounded-[30px] transition-all duration-300 w-full max-w-full
+              rounded-[30px] transition-all duration-300
             "
+            style={{ width: '100%', minWidth: 0 }}
           />
         )}
       </div>
