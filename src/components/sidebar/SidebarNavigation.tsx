@@ -252,7 +252,7 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
                    ${location.pathname === `/chat/${chat.id}` ? 'brightness-150' : ''}
                  `} />
                 <span className="font-nunito text-sm font-medium truncate overflow-hidden text-ellipsis whitespace-nowrap flex-1 min-w-0">
-                  {chat.title}
+                  {chat.title.length > 10 ? chat.title.substring(0, 10) + '...' : chat.title}
                 </span>
               </Link>
               

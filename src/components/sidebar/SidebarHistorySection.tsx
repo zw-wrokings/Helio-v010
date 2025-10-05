@@ -147,8 +147,8 @@ const SidebarHistorySection = ({ isOpen }: SidebarHistorySectionProps) => {
                   w-5 h-5 flex-shrink-0
                   ${location.pathname === `/chat/${chat.id}` ? 'brightness-150' : ''}
                 `} />
-                <span className="font-nunito text-sm font-medium truncate block overflow-hidden" style={{ flex: '1 1 0', minWidth: 0 }}>
-                  {chat.title}
+                <span className="font-nunito text-sm font-medium block overflow-hidden" style={{ flex: '1 1 0', minWidth: 0 }}>
+                  {chat.title.length > 10 ? chat.title.substring(0, 10) + '...' : chat.title}
                 </span>
               </Link>
               
