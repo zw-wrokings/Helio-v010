@@ -1,4 +1,4 @@
-import { Chrome as Home, MessageCircle, FolderOpen, Calendar, ListTodo, Plus, AtSign, FileText, History, ChevronDown, ChevronRight, MoreHorizontal, CreditCard as Edit2, Trash2, Pin, Check, X, StickyNote, SquareCheck as CheckSquare, Mail, ScrollText, File as FileIcon } from 'lucide-react';
+import { Chrome as Home, MessageCircle, FolderOpen, Calendar, ListTodo, Plus, AtSign, FileText, History, ChevronDown, ChevronRight, MoveHorizontal as MoreHorizontal, CreditCard as Edit2, Trash2, Pin, Check, X, StickyNote, SquareCheck as CheckSquare, Mail, ScrollText, File as FileIcon } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '../ui/tooltip';
