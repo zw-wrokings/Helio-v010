@@ -1,4 +1,4 @@
-import { Chrome as Home, MessageCircle, FolderOpen, Calendar, ListTodo, Plus, AtSign, FileText, History, ChevronDown, ChevronRight, MoveHorizontal as MoreHorizontal, CreditCard as Edit2, Trash2, Pin, Check, X, StickyNote, SquareCheck as CheckSquare, Mail, ScrollText, File as FileIcon } from 'lucide-react';
+import { Chrome as Home, MessageCircle, FolderOpen, Calendar, ListTodo, Plus, AtSign, FileText, History, ChevronDown, ChevronRight, MoveVertical as MoreVertical, CreditCard as Edit2, Trash2, Pin, Check, X, StickyNote, SquareCheck as CheckSquare, Mail, ScrollText, File as FileIcon } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '../ui/tooltip';
@@ -262,7 +262,7 @@ const [pendingExpand, setPendingExpand] = useState<string | null>(null);
                 border: 'none',
                 background: 'transparent'
               }}>
-                     <MoreHorizontal className="w-4 h-4 text-gray-400 hover:text-white" />
+                     <MoreVertical className="w-4 h-4 text-gray-400 hover:text-white" />
                    </button>
                  </PopoverTrigger>
                 
