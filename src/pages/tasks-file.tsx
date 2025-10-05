@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import TasksHeader from '@/components/tasks/TasksHeader';
+import DateSelector from '@/components/tasks/DateSelector';
 import { Plus, CheckCircle, ChevronRight, MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 
 interface Task {
   id: string;
@@ -246,30 +243,10 @@ const Tasks = () => {
                     <div className="flex flex-wrap justify-between items-center gap-2 relative z-20">
                       {/* Action Buttons in Middle (with border) */}
                       <div className="border border-[#414141] rounded-[20px] p-2 flex flex-wrap gap-2 relative z-30 bg-[#1b1b1b]">
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className={cn(
-                                "text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent",
-                                !selectedDate && "text-gray-400"
-                              )}
-                            >
-                              <Calendar className="h-4 w-4 mr-2" />
-                              {selectedDate ? format(selectedDate, "MMM dd") : "Date"}
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <CalendarComponent
-                              mode="single"
-                              selected={selectedDate}
-                              onSelect={setSelectedDate}
-                              initialFocus
-                              className={cn("p-3 pointer-events-auto")}
-                            />
-                          </PopoverContent>
-                        </Popover>
+                        <DateSelector
+                          selectedDate={selectedDate}
+                          onSelect={setSelectedDate}
+                        />
                         <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
                           <Flag className="h-4 w-4 mr-2" />
                           Priority
