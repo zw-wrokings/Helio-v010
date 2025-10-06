@@ -286,7 +286,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                 className="w-[300px] h-[400px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
                 align="center"
                 side="right"
-                sideOffset={8}
+                sideOffset={308}
+                alignOffset={-200}
                 onOpenAutoFocus={(e) => e.preventDefault()}
               >
                 <div className="flex flex-col h-full">
