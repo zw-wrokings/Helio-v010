@@ -214,3 +214,14 @@
 .scrollbar-smooth {
   scroll-behavior: smooth;
 }
+
+/* Calendar selected date styling */
+.rdp-day_selected {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.rdp-day_selected:hover {
+  background-color: #2563eb !important;
+  color: white !important;
+}
