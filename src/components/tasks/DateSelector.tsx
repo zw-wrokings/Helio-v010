@@ -16,11 +16,13 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [inputValue, setInputValue] = useState(
     selectedDate ? format(selectedDate, "MMM dd, yyyy") : ""
   );
+  const [activeButton, setActiveButton] = useState<string | null>(null);
 
-  const handleQuickSelect = (days: number | Date) => {
+  const handleQuickSelect = (days: number | Date, buttonId: string) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
     onSelect(date);
     setInputValue(format(date, "MMM dd, yyyy"));
+    setActiveButton(buttonId);
   };
 
   const handleCalendarSelect = (date: Date | undefined) => {
@@ -72,37 +74,69 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleQuickSelect(0)}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
+              onClick={() => handleQuickSelect(0, 'today')}
+              className={cn(
+                "bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200",
+                activeButton === 'today'
+                  ? "border-2 border-yellow-500 text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.5)]"
+                  : "border border-[#414141]"
+              )}
             >
-              <Sun className="h-3.5 w-3.5" />
+              <Sun className={cn(
+                "h-3.5 w-3.5 transition-all duration-200",
+                activeButton === 'today' && "text-yellow-400 drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]"
+              )} />
               Today
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleQuickSelect(1)}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
+              onClick={() => handleQuickSelect(1, 'tomorrow')}
+              className={cn(
+                "bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200",
+                activeButton === 'tomorrow'
+                  ? "border-2 border-orange-500 text-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.5)]"
+                  : "border border-[#414141]"
+              )}
             >
-              <Sunrise className="h-3.5 w-3.5" />
+              <Sunrise className={cn(
+                "h-3.5 w-3.5 transition-all duration-200",
+                activeButton === 'tomorrow' && "text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]"
+              )} />
               Tomorrow
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleQuickSelect(getNextWeekend())}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
+              onClick={() => handleQuickSelect(getNextWeekend(), 'weekend')}
+              className={cn(
+                "bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200",
+                activeButton === 'weekend'
+                  ? "border-2 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                  : "border border-[#414141]"
+              )}
             >
-              <CalendarDays className="h-3.5 w-3.5" />
+              <CalendarDays className={cn(
+                "h-3.5 w-3.5 transition-all duration-200",
+                activeButton === 'weekend' && "text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]"
+              )} />
               Next Weekend
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleQuickSelect(2)}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
+              onClick={() => handleQuickSelect(2, 'afterday')}
+              className={cn(
+                "bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200",
+                activeButton === 'afterday'
+                  ? "border-2 border-green-500 text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.5)]"
+                  : "border border-[#414141]"
+              )}
             >
-              <CalendarPlus className="h-3.5 w-3.5" />
+              <CalendarPlus className={cn(
+                "h-3.5 w-3.5 transition-all duration-200",
+                activeButton === 'afterday' && "text-green-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)]"
+              )} />
               After Day
             </Button>
           </div>
