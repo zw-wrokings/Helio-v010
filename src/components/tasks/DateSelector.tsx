@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarIcon, Clock, Repeat, Sun, Sunrise, CalendarDays, CalendarPlus } from 'lucide-react';
-import { format, addDays, nextSaturday } from "date-fns";
+import { format, addDays, nextSaturday, parse, isValid } from "date-fns";
 import { cn } from "@/lib/utils";
 
 interface DateSelectorProps {
@@ -18,6 +18,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   );
   const [activeButton, setActiveButton] = useState<string | null>(null);
   const [displayMonth, setDisplayMonth] = useState<Date>(selectedDate || new Date());
+  const [parsedDate, setParsedDate] = useState<Date | null>(null);
 
   const handleQuickSelect = (days: number | Date, buttonId: string) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
@@ -37,6 +38,59 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
 
   const getNextWeekend = () => {
     return nextSaturday(new Date());
+  };
+
+  const parseUserInput = (input: string): Date | null => {
+    if (!input.trim()) return null;
+
+    const currentYear = new Date().getFullYear();
+    const normalizedInput = input.toLowerCase().trim();
+
+    const patterns = [
+      { regex: /^(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?$/i, format: 'MMM d' },
+      { regex: /^(\d{1,2})(?:st|nd|rd|th)?\s+(\w+)$/i, format: 'd MMM' },
+    ];
+
+    for (const { regex, format: dateFormat } of patterns) {
+      const match = normalizedInput.match(regex);
+      if (match) {
+        try {
+          const parsedDate = parse(normalizedInput.replace(/(\d+)(st|nd|rd|th)/i, '$1'), dateFormat, new Date());
+          if (isValid(parsedDate)) {
+            parsedDate.setFullYear(currentYear);
+            if (parsedDate < new Date()) {
+              parsedDate.setFullYear(currentYear + 1);
+            }
+            return parsedDate;
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    const date = parseUserInput(inputValue);
+    setParsedDate(date);
+    if (date) {
+      setDisplayMonth(date);
+    }
+  }, [inputValue]);
+
+  const handleApplySuggestion = () => {
+    if (parsedDate) {
+      onSelect(parsedDate);
+      setInputValue(format(parsedDate, "MMM dd, yyyy"));
+      setActiveButton(null);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    setActiveButton(null);
   };
 
   return (
@@ -66,11 +120,24 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
             <input
               type="text"
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={handleInputChange}
               placeholder="type a date"
               className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
             />
           </div>
+
+          {/* Suggestion Buttons */}
+          {parsedDate && (
+            <div className="px-3 pb-3">
+              <Button
+                onClick={handleApplySuggestion}
+                size="sm"
+                className="w-full bg-[#252525] text-white hover:bg-[#2e2e2e] border border-[#414141] rounded-[10px] h-9 text-sm"
+              >
+                Apply: {format(parsedDate, "MMM dd, yyyy")}
+              </Button>
+            </div>
+          )}
 
           {/* Quick Select Buttons */}
           <div className="p-3 grid grid-cols-2 gap-2">
