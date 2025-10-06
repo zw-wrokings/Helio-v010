@@ -30,6 +30,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     if (date) {
       setInputValue(format(date, "MMM dd, yyyy"));
     }
+    setActiveButton(null);
   };
 
   const getNextWeekend = () => {
