@@ -121,7 +121,7 @@ const Tasks = () => {
             
             {/* Expandable content - positioned below the main section */}
             {isSectionExpanded && (
-              <div className="bg-transparent max-w-[980px]" style={{ marginBottom: '45px', marginLeft: '50px' }}>
+              <div className="bg-transparent max-w-[980px]" style={{ marginBottom: '45px' }}>
                 {/* Table for tasks */}
                 <div className="bg-transparent rounded-lg overflow-hidden">
                   <Table>
