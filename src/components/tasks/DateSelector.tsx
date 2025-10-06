@@ -105,7 +105,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     const normalizedInput = input.toLowerCase().trim().replace(/\s+/g, '');
 
     const patterns = [
-      /^(\d{1,2}):(\d{2})\s*(am|pm)?$/i,
+      /^(\d{1,2}):(\d{1,2})\s*(am|pm)?$/i,
       /^(\d{1,2})\s*(am|pm)$/i,
       /^(\d{1,2})$/,
     ];
