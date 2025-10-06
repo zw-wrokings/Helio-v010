@@ -35,7 +35,7 @@ function Calendar({
         row: "flex w-full mt-2",
         cell: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
         day: cn(
-          "h-9 w-9 p-0 font-normal text-gray-300 hover:bg-[#2e2e2e] hover:text-white rounded-md transition-all aria-selected:opacity-100"
+          "h-9 w-9 p-0 font-normal text-gray-300 rounded-md transition-all aria-selected:opacity-100 [&:not(.rdp-day_selected)]:hover:bg-[#2e2e2e] [&:not(.rdp-day_selected)]:hover:text-white"
         ),
         day_range_end: "day-range-end",
         day_selected:
