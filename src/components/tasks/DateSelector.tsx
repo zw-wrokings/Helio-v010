@@ -22,7 +22,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [timePopoverOpen, setTimePopoverOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [timeInputValue, setTimeInputValue] = useState("");
-  const [parsedTime, setParsedTime] = useState<string | null>(null);
+  const [parsedTime, setParsedTime] = useState<{ time: string; display: string } | null>(null);
 
   const handleQuickSelect = (days: number | Date, buttonId: string) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
@@ -99,14 +99,15 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     setActiveButton(null);
   };
 
-  const parseTimeInput = (input: string): string | null => {
+  const parseTimeInput = (input: string): { time: string; display: string } | null => {
     if (!input.trim()) return null;
 
-    const normalizedInput = input.toLowerCase().trim().replace(/\s+/g, '');
+    const normalizedInput = input.toLowerCase().trim();
 
     const patterns = [
-      /^(\d{1,2}):(\d{1,2})\s*(am|pm)?$/i,
+      /^(\d{1,2})[:|\s](\d{1,2})\s*(am|pm)$/i,
       /^(\d{1,2})\s*(am|pm)$/i,
+      /^(\d{1,2})[:|\s](\d{1,2})$/i,
       /^(\d{1,2})$/,
     ];
 
@@ -114,8 +115,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
       const match = normalizedInput.match(pattern);
       if (match) {
         let hours = parseInt(match[1]);
-        let minutes = match[2] ? parseInt(match[2]) : 0;
-        const period = match[3] || match[2];
+        let minutes = match[2] && !['am', 'pm'].includes(match[2].toLowerCase()) ? parseInt(match[2]) : 0;
+        let period = match[3] || (match[2] && ['am', 'pm'].includes(match[2].toLowerCase()) ? match[2] : null);
 
         if (period && typeof period === 'string' && (period.toLowerCase() === 'am' || period.toLowerCase() === 'pm')) {
           if (period.toLowerCase() === 'pm' && hours !== 12) {
@@ -123,10 +124,18 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
           } else if (period.toLowerCase() === 'am' && hours === 12) {
             hours = 0;
           }
+        } else {
+          period = hours >= 12 ? 'PM' : 'AM';
         }
 
         if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
-          return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+          const time24 = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+          const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+          const displayPeriod = hours >= 12 ? 'PM' : 'AM';
+          const display = `${displayHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${displayPeriod}`;
+
+          return { time: time24, display };
         }
       }
     }
@@ -141,8 +150,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
 
   const handleApplyTime = () => {
     if (parsedTime) {
-      setSelectedTime(parsedTime);
-      setTimeInputValue(parsedTime);
+      setSelectedTime(parsedTime.display);
+      setTimeInputValue(parsedTime.display);
     }
   };
 
@@ -151,9 +160,15 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   };
 
   const handleQuickTimeSelect = (time: string) => {
-    setSelectedTime(time);
-    setTimeInputValue(time);
-    setParsedTime(time);
+    const hours24 = parseInt(time.split(':')[0]);
+    const minutes = time.split(':')[1];
+    const displayHours = hours24 === 0 ? 12 : hours24 > 12 ? hours24 - 12 : hours24;
+    const displayPeriod = hours24 >= 12 ? 'PM' : 'AM';
+    const display = `${displayHours.toString().padStart(2, '0')}:${minutes} ${displayPeriod}`;
+
+    setSelectedTime(display);
+    setTimeInputValue(display);
+    setParsedTime({ time, display });
   };
 
   return (
@@ -310,7 +325,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                         size="sm"
                         className="w-full bg-[#252525] text-white hover:bg-[#2e2e2e] border border-[#414141] rounded-[10px] h-9 text-sm"
                       >
-                        Apply: {parsedTime}
+                        Apply: {parsedTime.display}
                       </Button>
                     </div>
                   )}
