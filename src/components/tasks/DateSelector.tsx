@@ -23,6 +23,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [timeInputValue, setTimeInputValue] = useState("");
   const [parsedTime, setParsedTime] = useState<{ time: string; display: string } | null>(null);
+  const [showTimeConfirmation, setShowTimeConfirmation] = useState(false);
+  const [confirmedTime, setConfirmedTime] = useState<string>("");
 
   const handleQuickSelect = (days: number | Date, buttonId: string) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
@@ -152,6 +154,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     if (parsedTime) {
       setSelectedTime(parsedTime.display);
       setTimeInputValue(parsedTime.display);
+      setConfirmedTime(parsedTime.display);
+      setShowTimeConfirmation(true);
     }
   };
 
@@ -383,6 +387,17 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                       </Button>
                     </div>
                   </div>
+
+                  {/* Confirmation Message */}
+                  {showTimeConfirmation && confirmedTime && (
+                    <div className="px-3 pb-3">
+                      <div className="bg-[#252525] border border-[#414141] rounded-[10px] p-3 text-center">
+                        <p className="text-gray-300 text-sm">
+                          oh, at {confirmedTime}? nice :)
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </PopoverContent>
             </Popover>
