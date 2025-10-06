@@ -285,8 +285,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
               <PopoverContent
                 className="w-[300px] h-[400px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
                 align="start"
-                side="right"
-                sideOffset={8}
+                side="top"
+                sideOffset={-400}
                 alignOffset={0}
                 onOpenAutoFocus={(e) => e.preventDefault()}
               >
