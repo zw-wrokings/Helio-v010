@@ -289,7 +289,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                 sideOffset={308}
                 alignOffset={-200}
                 onOpenAutoFocus={(e) => e.preventDefault()}
-                style={{ transform: 'translate(795.2px, 239.6px)' }}
               >
                 <div className="flex flex-col h-full">
                   {/* Time Input Field */}
