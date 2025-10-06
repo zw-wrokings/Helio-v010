@@ -85,7 +85,7 @@ const Tasks = () => {
       {/* LIST View Content */}
       {currentView === 'list' && (
         <div className="px-4 mt-4">
-          <div>
+          <div className="ml-20">
             
             {/* Case b & e: Tasks-By-Kairo Section */}
             <div className="max-w-[980px]">
