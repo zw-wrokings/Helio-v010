@@ -17,12 +17,14 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     selectedDate ? format(selectedDate, "MMM dd, yyyy") : ""
   );
   const [activeButton, setActiveButton] = useState<string | null>(null);
+  const [displayMonth, setDisplayMonth] = useState<Date>(selectedDate || new Date());
 
   const handleQuickSelect = (days: number | Date, buttonId: string) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
     onSelect(date);
     setInputValue(format(date, "MMM dd, yyyy"));
     setActiveButton(buttonId);
+    setDisplayMonth(date);
   };
 
   const handleCalendarSelect = (date: Date | undefined) => {
@@ -128,7 +130,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
               mode="single"
               selected={selectedDate}
               onSelect={handleCalendarSelect}
-              className="rounded-[8px]"
+              month={displayMonth}
+              onMonthChange={setDisplayMonth}
+              className="rounded-[8px] transition-all duration-300 ease-in-out"
             />
           </div>
 
