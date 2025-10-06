@@ -49,6 +49,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     const patterns = [
       { regex: /^(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?$/i, format: 'MMM d' },
       { regex: /^(\d{1,2})(?:st|nd|rd|th)?\s+(\w+)$/i, format: 'd MMM' },
+      { regex: /^(\w+)\s+(\d{1,2})(?:st|nd|rd|th)?$/i, format: 'MMMM d' },
+      { regex: /^(\d{1,2})(?:st|nd|rd|th)?\s+(\w+)$/i, format: 'd MMMM' },
     ];
 
     for (const { regex, format: dateFormat } of patterns) {
