@@ -27,6 +27,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [confirmedTime, setConfirmedTime] = useState<string>("");
   const [repeatClicked, setRepeatClicked] = useState(false);
   const [repeatAnimating, setRepeatAnimating] = useState(false);
+  const [showDateConfirmation, setShowDateConfirmation] = useState(false);
+  const [tempSelectedDate, setTempSelectedDate] = useState<Date | undefined>(selectedDate);
 
   const getRandomTimeMessage = (time: string) => {
     const messages = [
@@ -51,11 +53,19 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   };
 
   const handleCalendarSelect = (date: Date | undefined) => {
-    onSelect(date);
+    setTempSelectedDate(date);
     if (date) {
-      setInputValue(format(date, "MMM dd, yyyy"));
+      setShowDateConfirmation(true);
     }
     setActiveButton(null);
+  };
+
+  const handleConfirmDate = () => {
+    if (tempSelectedDate) {
+      onSelect(tempSelectedDate);
+      setInputValue(format(tempSelectedDate, "MMM dd, yyyy"));
+      setShowDateConfirmation(false);
+    }
   };
 
   const getNextWeekend = () => {
@@ -293,12 +303,24 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
           <div className="flex-1 overflow-auto p-3">
             <Calendar
               mode="single"
-              selected={selectedDate}
+              selected={tempSelectedDate}
               onSelect={handleCalendarSelect}
               month={displayMonth}
               onMonthChange={setDisplayMonth}
               className="rounded-[8px] transition-all duration-300 ease-in-out"
             />
+
+            {/* Date Confirmation */}
+            {showDateConfirmation && tempSelectedDate && (
+              <div className="mt-3 text-center">
+                <button
+                  onClick={handleConfirmDate}
+                  className="text-gray-400 hover:text-white text-sm transition-colors duration-200 cursor-pointer underline decoration-dotted underline-offset-4"
+                >
+                  save?
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Time and Repeat Buttons */}
