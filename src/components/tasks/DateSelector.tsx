@@ -313,7 +313,10 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                   }}
                   className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
                 >
-                  <Clock className="h-3.5 w-3.5" />
+                  <Clock className={cn(
+                    "h-3.5 w-3.5 transition-all duration-300",
+                    confirmedTime && "text-purple-900 drop-shadow-[0_0_12px_rgba(88,28,135,0.9)]"
+                  )} />
                   {selectedTime || "Time"}
                 </Button>
               </PopoverTrigger>
