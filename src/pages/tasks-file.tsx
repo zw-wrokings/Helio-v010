@@ -20,7 +20,10 @@ interface Task {
 const Tasks = () => {
   const [currentView, setCurrentView] = useState('list');
   const [isRotated, setIsRotated] = useState(false);
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem('kario-tasks');
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [isSectionExpanded, setIsSectionExpanded] = useState(false);
@@ -44,21 +47,26 @@ const Tasks = () => {
         title: newTaskTitle.trim(),
         completed: false,
         creationDate: currentDate.toLocaleDateString(),
-        dueDate: new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(), // 7 days from now
+        dueDate: selectedDate ? selectedDate.toLocaleDateString() : new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(),
         time: currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         priority: 'Medium',
         description: ''
       };
-      setTasks([...tasks, newTask]);
+      const updatedTasks = [...tasks, newTask];
+      setTasks(updatedTasks);
+      localStorage.setItem('kario-tasks', JSON.stringify(updatedTasks));
       setNewTaskTitle('');
+      setSelectedDate(undefined);
       setIsAddingTask(false);
     }
   };
 
   const handleToggleTask = (taskId: string) => {
-    setTasks(tasks.map(task => 
+    const updatedTasks = tasks.map(task =>
       task.id === taskId ? { ...task, completed: !task.completed } : task
-    ));
+    );
+    setTasks(updatedTasks);
+    localStorage.setItem('kario-tasks', JSON.stringify(updatedTasks));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

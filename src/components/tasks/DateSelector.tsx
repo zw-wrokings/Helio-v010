@@ -44,6 +44,20 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     return messages[Math.floor(Math.random() * messages.length)];
   };
 
+  const getRandomSaveMessage = () => {
+    const messages = [
+      'save?',
+      'looks good?',
+      'confirm?',
+      'this one?',
+      'lock it in?',
+      'keep this?',
+      'done?',
+      'all set?'
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
+  };
+
   const handleQuickSelect = (days: number | Date, buttonId: string) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
     onSelect(date);
@@ -315,9 +329,14 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
               <div className="mt-3 text-center">
                 <button
                   onClick={handleConfirmDate}
-                  className="text-gray-400 hover:text-white text-sm transition-colors duration-200 cursor-pointer underline decoration-dotted underline-offset-4"
+                  className="text-gray-400 hover:text-white text-sm transition-colors duration-200 cursor-pointer underline decoration-dotted underline-offset-4 italic"
+                  style={{
+                    fontFamily: 'monospace',
+                    imageRendering: 'pixelated',
+                    textRendering: 'optimizeSpeed'
+                  }}
                 >
-                  save?
+                  {getRandomSaveMessage()}
                 </button>
               </div>
             )}
