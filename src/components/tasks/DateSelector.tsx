@@ -25,7 +25,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [parsedTime, setParsedTime] = useState<{ time: string; display: string } | null>(null);
   const [showTimeConfirmation, setShowTimeConfirmation] = useState(false);
   const [confirmedTime, setConfirmedTime] = useState<string>("");
-  const [repeatActive, setRepeatActive] = useState(false);
 
   const getRandomTimeMessage = (time: string) => {
     const messages = [
@@ -417,19 +416,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setRepeatActive(!repeatActive)}
               className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2"
             >
-              <Repeat
-                className={cn(
-                  "h-3.5 w-3.5 transition-all duration-300",
-                  repeatActive && "text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] animate-spin"
-                )}
-                style={{
-                  animationDuration: repeatActive ? '1s' : '0s',
-                  animationIterationCount: repeatActive ? '1' : '0'
-                }}
-              />
+              <Repeat className="h-3.5 w-3.5" />
               Repeat
             </Button>
           </div>
