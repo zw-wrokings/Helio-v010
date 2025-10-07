@@ -315,7 +315,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                 >
                   <Clock className={cn(
                     "h-3.5 w-3.5 transition-all duration-300",
-                    confirmedTime && "text-purple-900 drop-shadow-[0_0_12px_rgba(88,28,135,0.9)]"
+                    confirmedTime && "text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
                   )} />
                   {selectedTime || "Time"}
                 </Button>
