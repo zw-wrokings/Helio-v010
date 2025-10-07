@@ -215,14 +215,20 @@
   scroll-behavior: smooth;
 }
 
-@keyframes repeatSpin {
+@keyframes repeatRotate {
   0% {
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    transform: rotate(180deg) scale(1.1);
+    transform: rotate(0deg);
   }
   100% {
-    transform: rotate(360deg) scale(1);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes repeatGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
   }
 }

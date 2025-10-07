@@ -420,18 +420,10 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
               onClick={() => setRepeatClicked(!repeatClicked)}
               className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200"
             >
-              <div className="relative inline-flex items-center justify-center">
-                <Repeat className={cn(
-                  "h-3.5 w-3.5 transition-all duration-500",
-                  repeatClicked && "text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.9)] animate-[repeatSpin_1.2s_ease-in-out_infinite]"
-                )} />
-                {repeatClicked && (
-                  <>
-                    <div className="absolute inset-0 rounded-full bg-purple-500/20 animate-[ping_1.5s_ease-in-out_infinite]" />
-                    <div className="absolute inset-0 rounded-full bg-purple-500/30 animate-[pulse_1s_ease-in-out_infinite]" />
-                  </>
-                )}
-              </div>
+              <Repeat className={cn(
+                "h-3.5 w-3.5 transition-all duration-300",
+                repeatClicked && "text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.8)] animate-[repeatRotate_2s_linear_infinite]"
+              )} />
               Repeat
             </Button>
           </div>
