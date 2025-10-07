@@ -355,7 +355,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                         variant="ghost"
                         size="sm"
                         onClick={() => handleQuickTimeSelect('09:00')}
-                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[10px] h-9 text-xs"
+                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs"
                       >
                         9:00 AM
                       </Button>
@@ -363,7 +363,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                         variant="ghost"
                         size="sm"
                         onClick={() => handleQuickTimeSelect('12:00')}
-                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[10px] h-9 text-xs"
+                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs"
                       >
                         12:00 PM
                       </Button>
@@ -371,7 +371,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                         variant="ghost"
                         size="sm"
                         onClick={() => handleQuickTimeSelect('15:00')}
-                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[10px] h-9 text-xs"
+                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs"
                       >
                         3:00 PM
                       </Button>
@@ -379,7 +379,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                         variant="ghost"
                         size="sm"
                         onClick={() => handleQuickTimeSelect('18:00')}
-                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[10px] h-9 text-xs"
+                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs"
                       >
                         6:00 PM
                       </Button>
@@ -387,7 +387,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                         variant="ghost"
                         size="sm"
                         onClick={() => handleQuickTimeSelect('21:00')}
-                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[10px] h-9 text-xs"
+                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs"
                       >
                         9:00 PM
                       </Button>
@@ -395,21 +395,21 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                         variant="ghost"
                         size="sm"
                         onClick={() => handleQuickTimeSelect('00:00')}
-                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[10px] h-9 text-xs"
+                        className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs"
                       >
                         Midnight
                       </Button>
                     </div>
-                  </div>
 
-                  {/* Confirmation Message */}
-                  {showTimeConfirmation && confirmedTime && (
-                    <div className="px-3 pb-2 mt-1">
-                      <p className="text-gray-400 text-sm italic text-center animate-in fade-in duration-300">
-                        {getRandomTimeMessage(confirmedTime)}
-                      </p>
-                    </div>
-                  )}
+                    {/* Confirmation Message */}
+                    {showTimeConfirmation && confirmedTime && (
+                      <div className="px-3 pt-2">
+                        <p className="text-gray-400 text-sm italic text-center animate-in fade-in duration-300">
+                          {getRandomTimeMessage(confirmedTime)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </PopoverContent>
             </Popover>
