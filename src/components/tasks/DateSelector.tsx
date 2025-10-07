@@ -422,15 +422,19 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
               variant="ghost"
               size="sm"
               onClick={() => {
-                setRepeatClicked(true);
-                setRepeatAnimating(true);
-                setTimeout(() => setRepeatAnimating(false), 1000);
+                if (repeatClicked) {
+                  setRepeatClicked(false);
+                } else {
+                  setRepeatClicked(true);
+                  setRepeatAnimating(true);
+                  setTimeout(() => setRepeatAnimating(false), 1000);
+                }
               }}
               className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200"
             >
               <Repeat className={cn(
                 "h-3.5 w-3.5 transition-all duration-300",
-                repeatClicked && "text-pink-400 drop-shadow-[0_0_12px_rgba(244,114,182,0.8)]",
+                repeatClicked && "text-purple-400 drop-shadow-[0_0_12px_rgba(192,132,252,0.8)]",
                 repeatAnimating && "animate-[repeatRotate_1s_linear_1]"
               )} />
               Repeat
