@@ -26,20 +26,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [showTimeConfirmation, setShowTimeConfirmation] = useState(false);
   const [confirmedTime, setConfirmedTime] = useState<string>("");
 
-  const getRandomTimeMessage = (time: string) => {
-    const messages = [
-      `oh, at ${time}? nice :)`,
-      `${time}? perfect timing!`,
-      `cool, ${time} it is!`,
-      `${time}? sounds good to me!`,
-      `alright, ${time} then!`,
-      `${time}? got it!`,
-      `nice choice, ${time}!`,
-      `${time}? love it!`
-    ];
-    return messages[Math.floor(Math.random() * messages.length)];
-  };
-
   const handleQuickSelect = (days: number | Date, buttonId: string) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
     onSelect(date);
@@ -404,10 +390,12 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
 
                   {/* Confirmation Message */}
                   {showTimeConfirmation && confirmedTime && (
-                    <div className="px-3 pb-2 mt-1">
-                      <p className="text-gray-400 text-sm italic text-center animate-in fade-in duration-300">
-                        {getRandomTimeMessage(confirmedTime)}
-                      </p>
+                    <div className="px-3 pb-3">
+                      <div className="bg-[#252525] border border-[#414141] rounded-[10px] p-3 text-center">
+                        <p className="text-gray-300 text-sm">
+                          oh, at {confirmedTime}? nice :)
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
