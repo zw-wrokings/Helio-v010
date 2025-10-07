@@ -402,6 +402,14 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                     </div>
                   </div>
 
+                  {/* Confirmation Message */}
+                  {showTimeConfirmation && confirmedTime && (
+                    <div className="px-3 pb-2 mt-1">
+                      <p className="text-gray-400 text-sm italic text-center animate-in fade-in duration-300">
+                        {getRandomTimeMessage(confirmedTime)}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </PopoverContent>
             </Popover>
@@ -414,15 +422,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
               Repeat
             </Button>
           </div>
-
-          {/* Confirmation Message */}
-          {showTimeConfirmation && confirmedTime && (
-            <div className="px-3 pb-3">
-              <p className="text-gray-400 text-sm italic text-center animate-in fade-in duration-300">
-                {getRandomTimeMessage(confirmedTime)}
-              </p>
-            </div>
-          )}
         </div>
       </PopoverContent>
     </Popover>
