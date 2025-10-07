@@ -420,29 +420,15 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
               onClick={() => setRepeatClicked(!repeatClicked)}
               className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200"
             >
-              <div className="relative">
+              <div className="relative inline-flex items-center justify-center">
                 <Repeat className={cn(
-                  "h-3.5 w-3.5 transition-all duration-300",
-                  repeatClicked && "text-purple-400 animate-pulse drop-shadow-[0_0_12px_rgba(168,85,247,0.8)]"
+                  "h-3.5 w-3.5 transition-all duration-500",
+                  repeatClicked && "text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.9)] animate-[repeatSpin_1.2s_ease-in-out_infinite]"
                 )} />
                 {repeatClicked && (
                   <>
-                    <div className="absolute inset-0 animate-[spin_2s_ease-in-out_infinite] origin-center">
-                      <div className="w-full h-1/2 overflow-hidden">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 animate-[slideUp_0.6s_ease-in-out_infinite]">
-                          <polyline points="17 1 21 5 17 9" />
-                          <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="absolute inset-0 animate-[spin_2s_ease-in-out_infinite_reverse] origin-center">
-                      <div className="w-full h-1/2 overflow-hidden mt-[50%]">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-400 animate-[slideDown_0.6s_ease-in-out_infinite]">
-                          <polyline points="7 23 3 19 7 15" />
-                          <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-                        </svg>
-                      </div>
-                    </div>
+                    <div className="absolute inset-0 rounded-full bg-purple-500/20 animate-[ping_1.5s_ease-in-out_infinite]" />
+                    <div className="absolute inset-0 rounded-full bg-purple-500/30 animate-[pulse_1s_ease-in-out_infinite]" />
                   </>
                 )}
               </div>
