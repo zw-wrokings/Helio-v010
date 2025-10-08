@@ -200,6 +200,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
       setTimeInputValue(parsedTime.display);
       setConfirmedTime(parsedTime.display);
       setShowTimeConfirmation(true);
+      setShowDateConfirmation(true);
     }
   };
 
@@ -217,6 +218,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     setSelectedTime(display);
     setTimeInputValue(display);
     setParsedTime({ time, display });
+    setShowDateConfirmation(true);
   };
 
   return (
@@ -474,6 +476,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                   setRepeatAnimating(true);
                   setTimeout(() => setRepeatAnimating(false), 1000);
                 }
+                setShowDateConfirmation(true);
               }}
               className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200"
             >
