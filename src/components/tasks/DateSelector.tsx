@@ -60,10 +60,11 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
 
   const handleQuickSelect = (days: number | Date, buttonId: string) => {
     const date = typeof days === 'number' ? addDays(new Date(), days) : days;
-    onSelect(date);
+    setTempSelectedDate(date);
     setInputValue(format(date, "MMM dd, yyyy"));
     setActiveButton(buttonId);
     setDisplayMonth(date);
+    setShowDateConfirmation(true);
   };
 
   const handleCalendarSelect = (date: Date | undefined) => {
@@ -131,10 +132,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
 
   const handleApplySuggestion = () => {
     if (parsedDate) {
-      onSelect(parsedDate);
+      setTempSelectedDate(parsedDate);
       setInputValue(format(parsedDate, "MMM dd, yyyy"));
       setActiveButton(null);
-      setTempSelectedDate(parsedDate);
       setShowDateConfirmation(true);
     }
   };
