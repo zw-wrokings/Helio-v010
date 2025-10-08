@@ -79,6 +79,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
       onSelect(tempSelectedDate);
       setInputValue(format(tempSelectedDate, "MMM dd, yyyy"));
       setShowDateConfirmation(false);
+      setOpen(false);
     }
   };
 
