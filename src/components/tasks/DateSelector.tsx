@@ -29,6 +29,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [repeatAnimating, setRepeatAnimating] = useState(false);
   const [showDateConfirmation, setShowDateConfirmation] = useState(false);
   const [tempSelectedDate, setTempSelectedDate] = useState<Date | undefined>(selectedDate);
+  const [repeatPopoverOpen, setRepeatPopoverOpen] = useState(false);
+  const [repeatOption, setRepeatOption] = useState<string>("");
+  const [repeatEndDate, setRepeatEndDate] = useState<Date | undefined>();
 
   const getRandomTimeMessage = (time: string) => {
     const messages = [
@@ -465,28 +468,108 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                 </div>
               </PopoverContent>
             </Popover>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (repeatClicked) {
-                  setRepeatClicked(false);
-                } else {
-                  setRepeatClicked(true);
-                  setRepeatAnimating(true);
-                  setTimeout(() => setRepeatAnimating(false), 1000);
-                }
-                setShowDateConfirmation(true);
-              }}
-              className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200"
-            >
-              <Repeat className={cn(
-                "h-3.5 w-3.5 transition-all duration-300",
-                repeatClicked && "text-purple-400 drop-shadow-[0_0_12px_rgba(192,132,252,0.8)]",
-                repeatAnimating && "animate-[repeatRotate_1s_linear_1]"
-              )} />
-              Repeat
-            </Button>
+
+            {/* Repeat Popover */}
+            <Popover open={repeatPopoverOpen} onOpenChange={setRepeatPopoverOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    if (!repeatClicked) {
+                      setRepeatClicked(true);
+                      setRepeatAnimating(true);
+                      setTimeout(() => setRepeatAnimating(false), 1000);
+                    }
+                  }}
+                  className="bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs flex items-center justify-center gap-2 transition-all duration-200"
+                >
+                  <Repeat className={cn(
+                    "h-3.5 w-3.5 transition-all duration-300",
+                    repeatClicked && "text-purple-400 drop-shadow-[0_0_12px_rgba(192,132,252,0.8)]",
+                    repeatAnimating && "animate-[repeatRotate_1s_linear_1]"
+                  )} />
+                  Repeat
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-[320px] p-4 border border-[#414141] shadow-xl z-50 rounded-[20px]"
+                style={{ background: '#1F1F1F' }}
+                align="start"
+              >
+                <div className="space-y-4">
+                  {/* Header */}
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-white font-medium text-sm">Repeat Task</h3>
+                    {repeatClicked && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setRepeatClicked(false);
+                          setRepeatOption("");
+                          setRepeatEndDate(undefined);
+                          setRepeatPopoverOpen(false);
+                          setShowDateConfirmation(true);
+                        }}
+                        className="h-7 text-xs text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                      >
+                        Turn Off
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* Quick Repeat Options */}
+                  <div className="space-y-2">
+                    <p className="text-xs text-gray-400">Quick Options</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        { value: 'daily', label: 'Daily' },
+                        { value: 'every-week', label: 'Every Week' },
+                        { value: 'every-other-day', label: 'Every Other Day' },
+                        { value: 'every-monday', label: 'Every Monday' },
+                      ].map((option) => (
+                        <Button
+                          key={option.value}
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setRepeatOption(option.value);
+                            setShowDateConfirmation(true);
+                          }}
+                          className={cn(
+                            "h-9 text-xs border border-[#414141] rounded-[12px] transition-all duration-200",
+                            repeatOption === option.value
+                              ? "bg-purple-400/20 text-purple-300 border-purple-400/50"
+                              : "bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white"
+                          )}
+                        >
+                          {option.label}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t border-[#414141]"></div>
+
+                  {/* Repeat Until Section */}
+                  <div className="space-y-2">
+                    <p className="text-xs text-gray-400">Repeat Until (Optional)</p>
+                    <Calendar
+                      mode="single"
+                      selected={repeatEndDate}
+                      onSelect={(date) => {
+                        setRepeatEndDate(date);
+                        setShowDateConfirmation(true);
+                      }}
+                      disabled={(date) => date < new Date()}
+                      className="rounded-[8px] transition-all duration-300 ease-in-out"
+                    />
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </PopoverContent>
