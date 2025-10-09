@@ -493,9 +493,12 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                 </Button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-[320px] p-4 border border-[#414141] shadow-xl z-50 rounded-[20px]"
+                className="w-[320px] p-4 border border-[#414141] shadow-xl z-50 rounded-[20px] ml-[165px]"
                 style={{ background: '#1F1F1F' }}
                 align="start"
+                side="right"
+                sideOffset={8}
+                alignOffset={0}
               >
                 <div className="space-y-4">
                   {/* Header */}
