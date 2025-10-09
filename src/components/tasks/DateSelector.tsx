@@ -32,6 +32,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
   const [repeatPopoverOpen, setRepeatPopoverOpen] = useState(false);
   const [repeatOption, setRepeatOption] = useState<string>("");
   const [repeatEndDate, setRepeatEndDate] = useState<Date | undefined>();
+  const [repeatInputValue, setRepeatInputValue] = useState("");
+  const [parsedRepeat, setParsedRepeat] = useState<string | null>(null);
 
   const getRandomTimeMessage = (time: string) => {
     const messages = [
@@ -501,36 +503,85 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                 alignOffset={0}
               >
                 <div className="space-y-4">
-                  {/* Header */}
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-white font-medium text-sm">Repeat Task</h3>
-                    {repeatClicked && (
+                  {/* Natural Language Input */}
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      value={repeatInputValue}
+                      onChange={(e) => {
+                        const value = e.target.value.toLowerCase();
+                        setRepeatInputValue(value);
+
+                        if (value.includes('daily') || value.includes('every day')) {
+                          setParsedRepeat('daily');
+                        } else if (value.includes('weekly') || value.includes('every week')) {
+                          setParsedRepeat('every-week');
+                        } else if (value.includes('every other day') || value.includes('every 2 days')) {
+                          setParsedRepeat('every-other-day');
+                        } else if (value.includes('weekday') || value.includes('mon-fri')) {
+                          setParsedRepeat('weekdays');
+                        } else if (value.includes('monday')) {
+                          setParsedRepeat('every-monday');
+                        } else if (value.includes('tuesday')) {
+                          setParsedRepeat('every-tuesday');
+                        } else if (value.includes('wednesday')) {
+                          setParsedRepeat('every-wednesday');
+                        } else if (value.includes('thursday')) {
+                          setParsedRepeat('every-thursday');
+                        } else if (value.includes('friday')) {
+                          setParsedRepeat('every-friday');
+                        } else if (value.includes('saturday')) {
+                          setParsedRepeat('every-saturday');
+                        } else if (value.includes('sunday')) {
+                          setParsedRepeat('every-sunday');
+                        } else if (value.match(/every (\d+) day/)) {
+                          const match = value.match(/every (\d+) day/);
+                          setParsedRepeat(`every-${match![1]}-days`);
+                        } else if (value.match(/every (\d+) week/)) {
+                          const match = value.match(/every (\d+) week/);
+                          setParsedRepeat(`every-${match![1]}-weeks`);
+                        } else {
+                          setParsedRepeat(null);
+                        }
+                      }}
+                      placeholder="Type repeat pattern (e.g., every day, every monday)"
+                      className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
+                    />
+                  </div>
+
+                  {/* Apply Suggestion Button */}
+                  {parsedRepeat && (
+                    <div className="pb-2">
                       <Button
-                        variant="ghost"
-                        size="sm"
                         onClick={() => {
-                          setRepeatClicked(false);
-                          setRepeatOption("");
-                          setRepeatEndDate(undefined);
-                          setRepeatPopoverOpen(false);
+                          setRepeatOption(parsedRepeat);
+                          setRepeatClicked(true);
                           setShowDateConfirmation(true);
                         }}
-                        className="h-7 text-xs text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                        size="sm"
+                        className="w-full bg-[#252525] text-white hover:bg-[#2e2e2e] border border-[#414141] rounded-[10px] h-9 text-sm"
                       >
-                        Turn Off
+                        Apply: {parsedRepeat.replace(/-/g, ' ')}
                       </Button>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   {/* Quick Repeat Options */}
                   <div className="space-y-2">
-                    <p className="text-xs text-gray-400">Quick Options</p>
                     <div className="grid grid-cols-2 gap-2">
                       {[
                         { value: 'daily', label: 'Daily' },
+                        { value: 'weekdays', label: 'Every Weekday' },
                         { value: 'every-week', label: 'Every Week' },
-                        { value: 'every-other-day', label: 'Every Other Day' },
+                        { value: 'every-month', label: 'Every Month' },
                         { value: 'every-monday', label: 'Every Monday' },
+                        { value: 'every-tuesday', label: 'Every Tuesday' },
+                        { value: 'every-wednesday', label: 'Every Wednesday' },
+                        { value: 'every-thursday', label: 'Every Thursday' },
+                        { value: 'every-friday', label: 'Every Friday' },
+                        { value: 'every-saturday', label: 'Every Saturday' },
+                        { value: 'every-sunday', label: 'Every Sunday' },
+                        { value: 'every-other-day', label: 'Every Other Day' },
                       ].map((option) => (
                         <Button
                           key={option.value}
@@ -538,6 +589,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                           size="sm"
                           onClick={() => {
                             setRepeatOption(option.value);
+                            setRepeatClicked(true);
                             setShowDateConfirmation(true);
                           }}
                           className={cn(
@@ -553,23 +605,28 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
                     </div>
                   </div>
 
-                  {/* Divider */}
-                  <div className="border-t border-[#414141]"></div>
-
-                  {/* Repeat Until Section */}
-                  <div className="space-y-2">
-                    <p className="text-xs text-gray-400">Repeat Until (Optional)</p>
-                    <Calendar
-                      mode="single"
-                      selected={repeatEndDate}
-                      onSelect={(date) => {
-                        setRepeatEndDate(date);
-                        setShowDateConfirmation(true);
-                      }}
-                      disabled={(date) => date < new Date()}
-                      className="rounded-[8px] transition-all duration-300 ease-in-out"
-                    />
-                  </div>
+                  {/* Active Repeat Display & Clear */}
+                  {repeatClicked && repeatOption && (
+                    <div className="flex items-center justify-between p-3 bg-purple-400/10 border border-purple-400/30 rounded-[12px]">
+                      <span className="text-sm text-purple-300">
+                        Repeats: {repeatOption.replace(/-/g, ' ')}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setRepeatClicked(false);
+                          setRepeatOption("");
+                          setRepeatEndDate(undefined);
+                          setRepeatInputValue("");
+                          setParsedRepeat(null);
+                        }}
+                        className="h-7 text-xs text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                      >
+                        Clear
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </PopoverContent>
             </Popover>
