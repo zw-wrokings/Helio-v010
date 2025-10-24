@@ -5,6 +5,7 @@ import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVer
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Task {
   id: string;
@@ -28,7 +29,8 @@ const Tasks = () => {
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [isSectionExpanded, setIsSectionExpanded] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>();
-  
+  const [selectedPriority, setSelectedPriority] = useState<'Low' | 'Medium' | 'High'>('Medium');
+
   // Calculate task statistics
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(task => task.completed).length;
@@ -49,7 +51,7 @@ const Tasks = () => {
         creationDate: currentDate.toLocaleDateString(),
         dueDate: selectedDate ? selectedDate.toLocaleDateString() : new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(),
         time: currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        priority: 'Medium',
+        priority: selectedPriority,
         description: ''
       };
       const updatedTasks = [...tasks, newTask];
@@ -57,6 +59,7 @@ const Tasks = () => {
       localStorage.setItem('kario-tasks', JSON.stringify(updatedTasks));
       setNewTaskTitle('');
       setSelectedDate(undefined);
+      setSelectedPriority('Medium');
       setIsAddingTask(false);
     }
   };
@@ -255,10 +258,61 @@ const Tasks = () => {
                           selectedDate={selectedDate}
                           onSelect={setSelectedDate}
                         />
-                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
-                          <Flag className="h-4 w-4 mr-2" />
-                          Priority
-                        </Button>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
+                              <Flag className="h-4 w-4 mr-2" />
+                              Priority
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            className="w-48 p-2 bg-[#1b1b1b] border border-[#414141] rounded-[12px]"
+                            align="start"
+                            sideOffset={5}
+                          >
+                            <div className="flex flex-col gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedPriority('High')}
+                                className={`justify-start text-left hover:bg-[#2A2A2C] rounded-[8px] transition-all duration-200 ${
+                                  selectedPriority === 'High'
+                                    ? 'bg-red-500/20 text-red-400 hover:bg-red-500/20'
+                                    : 'text-gray-400 hover:text-white'
+                                }`}
+                              >
+                                <Flag className="h-4 w-4 mr-2 text-red-400" />
+                                High Priority
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedPriority('Medium')}
+                                className={`justify-start text-left hover:bg-[#2A2A2C] rounded-[8px] transition-all duration-200 ${
+                                  selectedPriority === 'Medium'
+                                    ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20'
+                                    : 'text-gray-400 hover:text-white'
+                                }`}
+                              >
+                                <Flag className="h-4 w-4 mr-2 text-yellow-400" />
+                                Medium Priority
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedPriority('Low')}
+                                className={`justify-start text-left hover:bg-[#2A2A2C] rounded-[8px] transition-all duration-200 ${
+                                  selectedPriority === 'Low'
+                                    ? 'bg-green-500/20 text-green-400 hover:bg-green-500/20'
+                                    : 'text-gray-400 hover:text-white'
+                                }`}
+                              >
+                                <Flag className="h-4 w-4 mr-2 text-green-400" />
+                                Low Priority
+                              </Button>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
                         <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
                           <Bell className="h-4 w-4 mr-2" />
                           Reminder
