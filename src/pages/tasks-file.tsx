@@ -14,7 +14,7 @@ interface Task {
   creationDate: string;
   dueDate: string;
   time: string;
-  priority: 'Low' | 'Medium' | 'High';
+  priority: string;
   description: string;
 }
 
@@ -29,7 +29,7 @@ const Tasks = () => {
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [isSectionExpanded, setIsSectionExpanded] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const [selectedPriority, setSelectedPriority] = useState<'Low' | 'Medium' | 'High'>('Medium');
+  const [selectedPriority, setSelectedPriority] = useState<string>('Priority 3');
 
   // Calculate task statistics
   const totalTasks = tasks.length;
@@ -59,7 +59,7 @@ const Tasks = () => {
       localStorage.setItem('kario-tasks', JSON.stringify(updatedTasks));
       setNewTaskTitle('');
       setSelectedDate(undefined);
-      setSelectedPriority('Medium');
+      setSelectedPriority('Priority 3');
       setIsAddingTask(false);
     }
   };
@@ -200,9 +200,13 @@ const Tasks = () => {
                           <TableCell className="text-white">{task.creationDate}</TableCell>
                           <TableCell>
                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              task.priority === 'High' ? 'bg-red-500/20 text-red-400' :
-                              task.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' :
-                              'bg-green-500/20 text-green-400'
+                              task.priority === 'Priority 1' ? 'bg-red-500/20 text-red-400' :
+                              task.priority === 'Priority 2' ? 'bg-orange-500/20 text-orange-400' :
+                              task.priority === 'Priority 3' ? 'bg-yellow-500/20 text-yellow-400' :
+                              task.priority === 'Priority 4' ? 'bg-green-500/20 text-green-400' :
+                              task.priority === 'Priority 5' ? 'bg-blue-500/20 text-blue-400' :
+                              task.priority === 'Priority 6' ? 'bg-purple-500/20 text-purple-400' :
+                              'bg-gray-500/20 text-gray-400'
                             }`}>
                               {task.priority}
                             </span>
