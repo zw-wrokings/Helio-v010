@@ -410,9 +410,11 @@ const Notes = () => {
       {/* Notes Grid */}
       <div className="px-4 mt-8">
         <div className={`ml-20 ${
-          displayedNotes.length > 0 
-            ? `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 ${
-                isOpen ? 'xl:grid-cols-4' : 'xl:grid-cols-5'
+          displayedNotes.length > 0
+            ? `grid gap-3 ${
+                isOpen
+                  ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5'
+                  : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'
               }`
             : 'flex justify-center items-center min-h-[400px]'
         }`}>
@@ -427,7 +429,7 @@ const Notes = () => {
               onDragOver={currentView !== 'deleted' ? handleDragOver : undefined}
               onDrop={currentView !== 'deleted' ? (e) => handleDrop(e, note.id) : undefined}
               onDragEnd={currentView !== 'deleted' ? handleDragEnd : undefined}
-              className={`group w-[250px] h-[250px] rounded-[15px] p-4 shadow-lg flex flex-col relative transition-all duration-300 ${
+              className={`group w-full aspect-square rounded-[15px] p-4 shadow-lg flex flex-col relative transition-all duration-300 ${
                 newlyCreatedNotes.has(note.id) ? 'animate-scale-in animate-fade-in' : ''
               } ${
                 draggedNoteId === note.id ? 'opacity-30 scale-95 rotate-3' : ''
