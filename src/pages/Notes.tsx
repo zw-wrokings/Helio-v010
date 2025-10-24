@@ -186,16 +186,20 @@ const Notes = () => {
     setDraggedNoteId(noteId);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', noteId);
-    
-    // Create a custom drag image with reduced opacity
+
+    // Create a custom drag image with fixed size
     const dragElement = e.currentTarget as HTMLElement;
     const dragImage = dragElement.cloneNode(true) as HTMLElement;
+    dragImage.style.position = 'absolute';
+    dragImage.style.top = '-9999px';
+    dragImage.style.width = '250px';
+    dragImage.style.height = '250px';
     dragImage.style.opacity = '0.8';
     dragImage.style.transform = 'rotate(5deg)';
     dragImage.style.pointerEvents = 'none';
     document.body.appendChild(dragImage);
     e.dataTransfer.setDragImage(dragImage, 125, 125);
-    
+
     setTimeout(() => document.body.removeChild(dragImage), 0);
   };
 
