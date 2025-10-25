@@ -9,6 +9,11 @@ interface PrioritySelectorProps {
   onSelect: (priority: string) => void;
 }
 
+interface CustomPriorityData {
+  name: string;
+  color: string;
+}
+
 const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, onSelect }) => {
   const [open, setOpen] = useState(false);
   const [tempSelectedPriority, setTempSelectedPriority] = useState<string>(selectedPriority);
@@ -16,7 +21,12 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
   const [inputValue, setInputValue] = useState('');
   const [customPriority, setCustomPriority] = useState<string | null>(null);
   const [selectedCustomColor, setSelectedCustomColor] = useState<string>('text-gray-400');
-  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
+  const [recentCustomPriorities, setRecentCustomPriorities] = useState<CustomPriorityData[]>(() => {
+    const saved = localStorage.getItem('kario-custom-priorities');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedPriorityColor, setSelectedPriorityColor] = useState<string>('text-gray-400');
 
   const priorities = [
     { level: 1, color: 'text-red-500' },
@@ -52,8 +62,11 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
     return messages[Math.floor(Math.random() * messages.length)];
   };
 
-  const handlePrioritySelect = (priority: string) => {
+  const handlePrioritySelect = (priority: string, color?: string) => {
     setTempSelectedPriority(priority);
+    if (color) {
+      setSelectedPriorityColor(color);
+    }
     setShowConfirmation(true);
   };
 
@@ -69,7 +82,11 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
       const priorityData = priorities.find(p => p.level === level);
       return priorityData?.color || 'text-gray-400';
     }
-    return 'text-gray-400';
+    const customPriorityData = recentCustomPriorities.find(p => p.name === priority);
+    if (customPriorityData) {
+      return customPriorityData.color;
+    }
+    return selectedPriorityColor;
   };
 
   const getPriorityBg = (priority: string, isSelected: boolean) => {
@@ -107,9 +124,20 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
 
   const handleApplyCustom = () => {
     if (customPriority) {
+      const newCustomPriority: CustomPriorityData = {
+        name: customPriority,
+        color: selectedCustomColor
+      };
+
+      const updatedRecents = [newCustomPriority, ...recentCustomPriorities.filter(p => p.name !== customPriority)].slice(0, 10);
+      setRecentCustomPriorities(updatedRecents);
+      localStorage.setItem('kario-custom-priorities', JSON.stringify(updatedRecents));
+
       setTempSelectedPriority(customPriority);
+      setSelectedPriorityColor(selectedCustomColor);
       setInputValue('');
       setCustomPriority(null);
+      setSelectedCustomColor('text-gray-400');
       setShowConfirmation(true);
     }
   };
@@ -152,26 +180,32 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
                 maxLength={20}
               />
               {inputValue.trim() && (
-                <div className="relative">
-                  <Flag
-                    className={cn("h-5 w-5 cursor-pointer transition-all hover:scale-110", selectedCustomColor)}
-                    onClick={() => setShowColorPicker(!showColorPicker)}
-                  />
-                  {showColorPicker && (
-                    <div className="absolute right-0 top-8 bg-[#252525] border border-[#414141] rounded-lg p-2 grid grid-cols-4 gap-2 z-50">
+                <Popover open={colorPickerOpen} onOpenChange={setColorPickerOpen}>
+                  <PopoverTrigger asChild>
+                    <Flag
+                      className={cn("h-5 w-5 cursor-pointer transition-all hover:scale-110", selectedCustomColor)}
+                    />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto p-3 bg-[#252525] border border-[#414141] rounded-lg"
+                    align="end"
+                    side="right"
+                    sideOffset={10}
+                  >
+                    <div className="grid grid-cols-4 gap-2">
                       {colorOptions.map((color) => (
                         <Flag
                           key={color.name}
-                          className={cn("h-5 w-5 cursor-pointer hover:scale-125 transition-all", color.class)}
+                          className={cn("h-6 w-6 cursor-pointer hover:scale-125 transition-all", color.class)}
                           onClick={() => {
                             setSelectedCustomColor(color.class);
-                            setShowColorPicker(false);
+                            setColorPickerOpen(false);
                           }}
                         />
                       ))}
                     </div>
-                  )}
-                </div>
+                  </PopoverContent>
+                </Popover>
               )}
             </div>
           </div>
@@ -189,8 +223,33 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
             </div>
           )}
 
+          {/* Recent Custom Priorities */}
+          {recentCustomPriorities.length > 0 && (
+            <div className="p-3 space-y-2">
+              <div className="text-xs text-gray-500 mb-2">Recent Custom</div>
+              {recentCustomPriorities.map((customPri, index) => (
+                <Button
+                  key={index}
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handlePrioritySelect(customPri.name, customPri.color)}
+                  className={cn(
+                    "w-full justify-start text-left border border-[#414141] rounded-[15px] h-9 text-xs flex items-center gap-2 transition-all duration-200",
+                    tempSelectedPriority === customPri.name
+                      ? 'bg-[#2e2e2e] text-white'
+                      : 'bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white'
+                  )}
+                >
+                  <Flag className={cn("h-4 w-4", customPri.color)} />
+                  {customPri.name}
+                </Button>
+              ))}
+            </div>
+          )}
+
           {/* Priority Options */}
           <div className="p-3 space-y-2">
+            <div className="text-xs text-gray-500 mb-2">Default Priorities</div>
             {priorities.map((priority) => (
               <Button
                 key={priority.level}
