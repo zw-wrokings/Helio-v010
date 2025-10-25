@@ -15,6 +15,8 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [customPriority, setCustomPriority] = useState<string | null>(null);
+  const [selectedCustomColor, setSelectedCustomColor] = useState<string>('text-gray-400');
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const priorities = [
     { level: 1, color: 'text-red-500' },
@@ -23,6 +25,17 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
     { level: 4, color: 'text-green-500' },
     { level: 5, color: 'text-blue-500' },
     { level: 6, color: 'text-purple-500' }
+  ];
+
+  const colorOptions = [
+    { name: 'red', class: 'text-red-500' },
+    { name: 'orange', class: 'text-orange-500' },
+    { name: 'yellow', class: 'text-yellow-500' },
+    { name: 'green', class: 'text-green-500' },
+    { name: 'blue', class: 'text-blue-500' },
+    { name: 'purple', class: 'text-purple-500' },
+    { name: 'pink', class: 'text-pink-500' },
+    { name: 'cyan', class: 'text-cyan-500' },
   ];
 
   const getRandomSaveMessage = () => {
@@ -129,14 +142,38 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
         <div className="flex flex-col">
           {/* Input Field */}
           <div className="p-3">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder="type custom priority"
-              className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
-              maxLength={20}
-            />
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="type custom priority"
+                className="flex-1 bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
+                maxLength={20}
+              />
+              {inputValue.trim() && (
+                <div className="relative">
+                  <Flag
+                    className={cn("h-5 w-5 cursor-pointer transition-all hover:scale-110", selectedCustomColor)}
+                    onClick={() => setShowColorPicker(!showColorPicker)}
+                  />
+                  {showColorPicker && (
+                    <div className="absolute right-0 top-8 bg-[#252525] border border-[#414141] rounded-lg p-2 grid grid-cols-4 gap-2 z-50">
+                      {colorOptions.map((color) => (
+                        <Flag
+                          key={color.name}
+                          className={cn("h-5 w-5 cursor-pointer hover:scale-125 transition-all", color.class)}
+                          onClick={() => {
+                            setSelectedCustomColor(color.class);
+                            setShowColorPicker(false);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Custom Priority Apply Button */}
