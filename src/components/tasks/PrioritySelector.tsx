@@ -115,11 +115,12 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
           variant="ghost"
           size="sm"
           className={cn(
-            "text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent"
+            "hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent",
+            getPriorityBg(selectedPriority, true)
           )}
         >
-          <Flag className="h-4 w-4 mr-2" />
-          Priority
+          <Flag className={cn("h-4 w-4 mr-2", getPriorityColor(selectedPriority))} />
+          {selectedPriority}
         </Button>
       </PopoverTrigger>
       <PopoverContent
