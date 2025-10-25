@@ -114,13 +114,10 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
         <Button
           variant="ghost"
           size="sm"
-          className={cn(
-            "hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent",
-            getPriorityBg(selectedPriority, true)
-          )}
+          className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent"
         >
           <Flag className={cn("h-4 w-4 mr-2", getPriorityColor(selectedPriority))} />
-          {selectedPriority}
+          <span className={getPriorityColor(selectedPriority)}>{selectedPriority}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -140,9 +137,6 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
               className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
               maxLength={20}
             />
-            <div className="text-xs text-gray-500 mt-1 text-right">
-              {inputValue.length}/20
-            </div>
           </div>
 
           {/* Custom Priority Apply Button */}
