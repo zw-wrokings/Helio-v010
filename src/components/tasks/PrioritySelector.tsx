@@ -90,7 +90,7 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
   };
 
   const getPriorityBg = (priority: string, isSelected: boolean) => {
-    if (!isSelected) return 'bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white';
+    if (!isSelected) return 'bg-[#252525] text-gray-300 hover:bg-white hover:text-black';
 
     if (priority.startsWith('Priority ')) {
       const level = parseInt(priority.replace('Priority ', ''));
@@ -187,16 +187,16 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
                     />
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-auto p-3 bg-[#252525] border border-[#414141] rounded-lg"
-                    align="end"
+                    className="w-auto p-4 bg-[#252525] border border-[#414141] rounded-lg"
+                    align="start"
                     side="right"
                     sideOffset={10}
                   >
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-4 gap-3">
                       {colorOptions.map((color) => (
                         <Flag
                           key={color.name}
-                          className={cn("h-6 w-6 cursor-pointer hover:scale-125 transition-all", color.class)}
+                          className={cn("h-8 w-8 cursor-pointer hover:scale-125 transition-all", color.class)}
                           onClick={() => {
                             setSelectedCustomColor(color.class);
                             setColorPickerOpen(false);

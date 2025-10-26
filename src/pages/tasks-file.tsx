@@ -36,6 +36,34 @@ const Tasks = () => {
   const completedTasks = tasks.filter(task => task.completed).length;
   const pendingTasks = tasks.filter(task => !task.completed).length;
 
+  const getPriorityColorFromStorage = (priorityName: string) => {
+    const saved = localStorage.getItem('kario-custom-priorities');
+    if (saved) {
+      const customPriorities = JSON.parse(saved);
+      const found = customPriorities.find((p: { name: string; color: string }) => p.name === priorityName);
+      if (found) {
+        return found.color;
+      }
+    }
+    return 'text-gray-400';
+  };
+
+  const getPriorityStyle = (priorityName: string) => {
+    if (priorityName.startsWith('Priority ')) {
+      const level = parseInt(priorityName.replace('Priority ', ''));
+      const styles = {
+        1: { bg: 'bg-red-500/20', text: 'text-red-400' },
+        2: { bg: 'bg-orange-500/20', text: 'text-orange-400' },
+        3: { bg: 'bg-yellow-500/20', text: 'text-yellow-400' },
+        4: { bg: 'bg-green-500/20', text: 'text-green-400' },
+        5: { bg: 'bg-blue-500/20', text: 'text-blue-400' },
+        6: { bg: 'bg-purple-500/20', text: 'text-purple-400' },
+      };
+      return styles[level as keyof typeof styles] || { bg: 'bg-gray-500/20', text: 'text-gray-400' };
+    }
+    return { bg: 'bg-gray-500/20', text: getPriorityColorFromStorage(priorityName) };
+  };
+
   const handleCreateTask = () => {
     setIsRotated(!isRotated);
     setIsAddingTask(true);
@@ -199,17 +227,15 @@ const Tasks = () => {
                           <TableCell className="text-gray-300">{task.description || 'No description'}</TableCell>
                           <TableCell className="text-white">{task.creationDate}</TableCell>
                           <TableCell>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              task.priority === 'Priority 1' ? 'bg-red-500/20 text-red-400' :
-                              task.priority === 'Priority 2' ? 'bg-orange-500/20 text-orange-400' :
-                              task.priority === 'Priority 3' ? 'bg-yellow-500/20 text-yellow-400' :
-                              task.priority === 'Priority 4' ? 'bg-green-500/20 text-green-400' :
-                              task.priority === 'Priority 5' ? 'bg-blue-500/20 text-blue-400' :
-                              task.priority === 'Priority 6' ? 'bg-purple-500/20 text-purple-400' :
-                              'bg-gray-500/20 text-gray-400'
-                            }`}>
-                              {task.priority}
-                            </span>
+                            {(() => {
+                              const style = getPriorityStyle(task.priority);
+                              return (
+                                <span className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 w-fit ${style.bg} ${style.text}`}>
+                                  <Flag className={`h-3 w-3 ${style.text}`} />
+                                  {task.priority}
+                                </span>
+                              );
+                            })()}
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center justify-center">
