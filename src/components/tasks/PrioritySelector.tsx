@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Flag } from 'lucide-react';
+import { Flag, X } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 interface PrioritySelectorProps {
@@ -149,6 +149,13 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
     }
   };
 
+  const handleDeleteCustomPriority = (priorityName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const updatedRecents = recentCustomPriorities.filter(p => p.name !== priorityName);
+    setRecentCustomPriorities(updatedRecents);
+    localStorage.setItem('kario-custom-priorities', JSON.stringify(updatedRecents));
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -228,21 +235,28 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
             <div className="p-3 space-y-2">
               <div className="text-xs text-gray-500 mb-2">Recent Custom</div>
               {recentCustomPriorities.map((customPri, index) => (
-                <Button
-                  key={index}
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handlePrioritySelect(customPri.name, customPri.color)}
-                  className={cn(
-                    "w-full justify-start text-left border border-[#414141] rounded-[15px] h-9 text-xs flex items-center gap-2 transition-all duration-200",
-                    tempSelectedPriority === customPri.name
-                      ? 'bg-[#2e2e2e] text-white'
-                      : 'bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white'
-                  )}
-                >
-                  <Flag className={cn("h-4 w-4", customPri.color)} />
-                  {customPri.name}
-                </Button>
+                <div key={index} className="relative group">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handlePrioritySelect(customPri.name, customPri.color)}
+                    className={cn(
+                      "w-full justify-start text-left border border-[#414141] rounded-[15px] h-9 text-xs flex items-center gap-2 transition-all duration-200",
+                      tempSelectedPriority === customPri.name
+                        ? 'bg-[#2e2e2e] text-white'
+                        : 'bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white'
+                    )}
+                  >
+                    <Flag className={cn("h-4 w-4", customPri.color)} />
+                    {customPri.name}
+                  </Button>
+                  <button
+                    onClick={(e) => handleDeleteCustomPriority(customPri.name, e)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 hover:bg-red-500/20 rounded-md"
+                  >
+                    <X className="h-3.5 w-3.5 text-red-400" />
+                  </button>
+                </div>
               ))}
             </div>
           )}
