@@ -38,18 +38,14 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
   ];
 
   const colorOptions = [
-    { name: 'red', class: 'text-red-500', bg: 'bg-red-500' },
-    { name: 'orange', class: 'text-orange-500', bg: 'bg-orange-500' },
-    { name: 'yellow', class: 'text-yellow-500', bg: 'bg-yellow-500' },
-    { name: 'green', class: 'text-green-500', bg: 'bg-green-500' },
-    { name: 'blue', class: 'text-blue-500', bg: 'bg-blue-500' },
-    { name: 'purple', class: 'text-purple-500', bg: 'bg-purple-500' },
-    { name: 'pink', class: 'text-pink-500', bg: 'bg-pink-500' },
-    { name: 'cyan', class: 'text-cyan-500', bg: 'bg-cyan-500' },
-    { name: 'indigo', class: 'text-indigo-500', bg: 'bg-indigo-500' },
-    { name: 'teal', class: 'text-teal-500', bg: 'bg-teal-500' },
-    { name: 'lime', class: 'text-lime-500', bg: 'bg-lime-500' },
-    { name: 'amber', class: 'text-amber-500', bg: 'bg-amber-500' },
+    { name: 'red', class: 'text-red-500' },
+    { name: 'orange', class: 'text-orange-500' },
+    { name: 'yellow', class: 'text-yellow-500' },
+    { name: 'green', class: 'text-green-500' },
+    { name: 'blue', class: 'text-blue-500' },
+    { name: 'purple', class: 'text-purple-500' },
+    { name: 'pink', class: 'text-pink-500' },
+    { name: 'cyan', class: 'text-cyan-500' },
   ];
 
   const getRandomSaveMessage = () => {
@@ -94,28 +90,28 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
   };
 
   const getPriorityBg = (priority: string, isSelected: boolean) => {
+    if (!isSelected) return 'bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white';
+
     if (priority.startsWith('Priority ')) {
       const level = parseInt(priority.replace('Priority ', ''));
-      if (isSelected) {
-        switch (level) {
-          case 1:
-            return 'bg-red-500/20 text-red-400 hover:bg-[#2e2e2e] hover:text-white';
-          case 2:
-            return 'bg-orange-500/20 text-orange-400 hover:bg-[#2e2e2e] hover:text-white';
-          case 3:
-            return 'bg-yellow-500/20 text-yellow-400 hover:bg-[#2e2e2e] hover:text-white';
-          case 4:
-            return 'bg-green-500/20 text-green-400 hover:bg-[#2e2e2e] hover:text-white';
-          case 5:
-            return 'bg-blue-500/20 text-blue-400 hover:bg-[#2e2e2e] hover:text-white';
-          case 6:
-            return 'bg-purple-500/20 text-purple-400 hover:bg-[#2e2e2e] hover:text-white';
-          default:
-            return 'bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white';
-        }
+      switch (level) {
+        case 1:
+          return 'bg-red-500/20 text-red-400 hover:bg-red-500/20';
+        case 2:
+          return 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/20';
+        case 3:
+          return 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/20';
+        case 4:
+          return 'bg-green-500/20 text-green-400 hover:bg-green-500/20';
+        case 5:
+          return 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/20';
+        case 6:
+          return 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/20';
+        default:
+          return 'bg-[#252525] text-gray-300';
       }
     }
-    return 'bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white';
+    return 'bg-gray-500/20 text-gray-400 hover:bg-gray-500/20';
   };
 
   useEffect(() => {
@@ -191,26 +187,21 @@ const PrioritySelector: React.FC<PrioritySelectorProps> = ({ selectedPriority, o
                     />
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-auto p-4 bg-[#1b1b1b] border border-[#414141] rounded-lg shadow-xl"
+                    className="w-auto p-3 bg-[#252525] border border-[#414141] rounded-lg"
                     align="end"
                     side="right"
                     sideOffset={10}
                   >
-                    <div className="grid grid-cols-4 gap-3">
+                    <div className="grid grid-cols-4 gap-2">
                       {colorOptions.map((color) => (
-                        <div
+                        <Flag
                           key={color.name}
-                          className={cn(
-                            "w-10 h-10 rounded-lg cursor-pointer hover:scale-110 transition-all flex items-center justify-center",
-                            color.bg
-                          )}
+                          className={cn("h-6 w-6 cursor-pointer hover:scale-125 transition-all", color.class)}
                           onClick={() => {
                             setSelectedCustomColor(color.class);
                             setColorPickerOpen(false);
                           }}
-                        >
-                          <Flag className="h-6 w-6 text-white" />
-                        </div>
+                        />
                       ))}
                     </div>
                   </PopoverContent>
