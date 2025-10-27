@@ -300,6 +300,7 @@ const Tasks = () => {
                         <ReminderSelector
                           selectedReminder={selectedReminder}
                           onSelect={setSelectedReminder}
+                          selectedDate={selectedDate}
                         />
                         <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
                           <Tag className="h-4 w-4 mr-2" />
