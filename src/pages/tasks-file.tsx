@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TasksHeader from '@/components/tasks/TasksHeader';
 import DateSelector from '@/components/tasks/DateSelector';
 import PrioritySelector from '@/components/tasks/PrioritySelector';
+import ReminderSelector from '@/components/tasks/ReminderSelector';
 import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +17,7 @@ interface Task {
   time: string;
   priority: string;
   description: string;
+  reminder?: string;
 }
 
 const Tasks = () => {
@@ -30,6 +32,7 @@ const Tasks = () => {
   const [isSectionExpanded, setIsSectionExpanded] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedPriority, setSelectedPriority] = useState<string>('Priority 3');
+  const [selectedReminder, setSelectedReminder] = useState<string | undefined>();
 
   // Calculate task statistics
   const totalTasks = tasks.length;
@@ -80,7 +83,8 @@ const Tasks = () => {
         dueDate: selectedDate ? selectedDate.toLocaleDateString() : new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(),
         time: currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         priority: selectedPriority,
-        description: ''
+        description: '',
+        reminder: selectedReminder
       };
       const updatedTasks = [...tasks, newTask];
       setTasks(updatedTasks);
@@ -88,6 +92,7 @@ const Tasks = () => {
       setNewTaskTitle('');
       setSelectedDate(undefined);
       setSelectedPriority('Priority 3');
+      setSelectedReminder(undefined);
       setIsAddingTask(false);
     }
   };
@@ -292,10 +297,10 @@ const Tasks = () => {
                           selectedPriority={selectedPriority}
                           onSelect={setSelectedPriority}
                         />
-                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
-                          <Bell className="h-4 w-4 mr-2" />
-                          Reminder
-                        </Button>
+                        <ReminderSelector
+                          selectedReminder={selectedReminder}
+                          onSelect={setSelectedReminder}
+                        />
                         <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
                           <Tag className="h-4 w-4 mr-2" />
                           Label
