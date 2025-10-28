@@ -51,7 +51,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
   }, [customInput]);
 
   const handleReminderSelect = (value: string) => {
-    if (!selectedDate || !selectedTime) {
+    if (!selectedDate || !selectedTime || selectedTime.trim() === '') {
       return;
     }
     setTempSelectedReminder(value);
@@ -60,7 +60,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
   };
 
   const handleApplyCustom = () => {
-    if (parsedReminder && selectedDate && selectedTime) {
+    if (parsedReminder && selectedDate && selectedTime && selectedTime.trim() !== '') {
       setTempSelectedReminder(parsedReminder);
       onSelect(parsedReminder);
       setCustomInput('');
@@ -134,16 +134,16 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               onChange={(e) => setCustomInput(e.target.value)}
               placeholder="type reminder (e.g., 10 minutes, 2 hours)"
               className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
-              disabled={!selectedDate || !selectedTime}
+              disabled={!selectedDate || !selectedTime || selectedTime.trim() === ''}
             />
-            {(!selectedDate || !selectedTime) && (
+            {(!selectedDate || !selectedTime || selectedTime.trim() === '') && (
               <p className="text-xs text-gray-500 mt-1">
-                Please select {!selectedDate && !selectedTime ? 'date and time' : !selectedDate ? 'a date' : 'a time'} first
+                Please select {!selectedDate && (!selectedTime || selectedTime.trim() === '') ? 'date and time' : !selectedDate ? 'a date' : 'a time'} first
               </p>
             )}
           </div>
 
-          {parsedReminder && selectedDate && selectedTime && (
+          {parsedReminder && selectedDate && selectedTime && selectedTime.trim() !== '' && (
             <div className="px-3 pb-3">
               <Button
                 onClick={handleApplyCustom}
@@ -169,7 +169,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               variant="ghost"
               size="sm"
               onClick={() => handleReminderSelect('at-time')}
-              disabled={!selectedDate || !selectedTime}
+              disabled={!selectedDate || !selectedTime || selectedTime.trim() === ''}
               className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Bell className="h-4 w-4 mr-2" />
@@ -179,7 +179,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               variant="ghost"
               size="sm"
               onClick={() => handleReminderSelect('10m')}
-              disabled={!selectedDate || !selectedTime}
+              disabled={!selectedDate || !selectedTime || selectedTime.trim() === ''}
               className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Bell className="h-4 w-4 mr-2" />
@@ -189,7 +189,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               variant="ghost"
               size="sm"
               onClick={() => handleReminderSelect('30m')}
-              disabled={!selectedDate || !selectedTime}
+              disabled={!selectedDate || !selectedTime || selectedTime.trim() === ''}
               className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Bell className="h-4 w-4 mr-2" />
@@ -199,7 +199,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               variant="ghost"
               size="sm"
               onClick={() => handleReminderSelect('1h')}
-              disabled={!selectedDate || !selectedTime}
+              disabled={!selectedDate || !selectedTime || selectedTime.trim() === ''}
               className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Bell className="h-4 w-4 mr-2" />

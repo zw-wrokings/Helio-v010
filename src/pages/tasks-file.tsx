@@ -33,6 +33,7 @@ const Tasks = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedPriority, setSelectedPriority] = useState<string>('Priority 3');
   const [selectedReminder, setSelectedReminder] = useState<string | undefined>();
+  const [selectedTime, setSelectedTime] = useState<string>('');
 
   // Calculate task statistics
   const totalTasks = tasks.length;
@@ -93,6 +94,7 @@ const Tasks = () => {
       setSelectedDate(undefined);
       setSelectedPriority('Priority 3');
       setSelectedReminder(undefined);
+      setSelectedTime('');
       setIsAddingTask(false);
     }
   };
@@ -292,6 +294,7 @@ const Tasks = () => {
                         <DateSelector
                           selectedDate={selectedDate}
                           onSelect={setSelectedDate}
+                          onTimeSelect={setSelectedTime}
                         />
                         <PrioritySelector
                           selectedPriority={selectedPriority}
@@ -301,6 +304,7 @@ const Tasks = () => {
                           selectedReminder={selectedReminder}
                           onSelect={setSelectedReminder}
                           selectedDate={selectedDate}
+                          selectedTime={selectedTime}
                         />
                         <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
                           <Tag className="h-4 w-4 mr-2" />
