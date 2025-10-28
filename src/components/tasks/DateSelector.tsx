@@ -9,9 +9,10 @@ import { cn } from "@/lib/utils";
 interface DateSelectorProps {
   selectedDate?: Date;
   onSelect: (date: Date | undefined) => void;
+  onTimeSelect?: (time: string) => void;
 }
 
-const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) => {
+const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect, onTimeSelect }) => {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState(
     selectedDate ? format(selectedDate, "MMM dd, yyyy") : ""
@@ -206,6 +207,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
       setConfirmedTime(parsedTime.display);
       setShowTimeConfirmation(true);
       setShowDateConfirmation(true);
+      if (onTimeSelect) {
+        onTimeSelect(parsedTime.display);
+      }
     }
   };
 
@@ -224,6 +228,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({ selectedDate, onSelect }) =
     setTimeInputValue(display);
     setParsedTime({ time, display });
     setShowDateConfirmation(true);
+    if (onTimeSelect) {
+      onTimeSelect(display);
+    }
   };
 
   return (

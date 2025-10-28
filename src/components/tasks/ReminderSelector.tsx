@@ -11,11 +11,20 @@ interface ReminderSelectorProps {
   selectedTime?: string;
 }
 
+interface CustomReminderData {
+  value: string;
+  label: string;
+}
+
 const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, onSelect, selectedDate, selectedTime }) => {
   const [open, setOpen] = useState(false);
   const [tempSelectedReminder, setTempSelectedReminder] = useState<string | undefined>(selectedReminder);
   const [customInput, setCustomInput] = useState('');
   const [parsedReminder, setParsedReminder] = useState<string | null>(null);
+  const [recentCustomReminders, setRecentCustomReminders] = useState<CustomReminderData[]>(() => {
+    const saved = localStorage.getItem('kario-custom-reminders');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const parseReminderInput = (input: string): string | null => {
     if (!input.trim()) return null;
@@ -51,7 +60,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
   }, [customInput]);
 
   const handleReminderSelect = (value: string) => {
-    if (!selectedDate) {
+    if (!selectedDate || !selectedTime) {
       return;
     }
     setTempSelectedReminder(value);
@@ -60,9 +69,20 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
   };
 
   const handleApplyCustom = () => {
-    if (parsedReminder && selectedDate) {
+    if (parsedReminder && selectedDate && selectedTime) {
+      const newCustomReminder: CustomReminderData = {
+        value: parsedReminder,
+        label: getDisplayLabel(parsedReminder)
+      };
+
+      const updatedRecents = [newCustomReminder, ...recentCustomReminders.filter(r => r.value !== parsedReminder)].slice(0, 10);
+      setRecentCustomReminders(updatedRecents);
+      localStorage.setItem('kario-custom-reminders', JSON.stringify(updatedRecents));
+
       setTempSelectedReminder(parsedReminder);
       onSelect(parsedReminder);
+      setCustomInput('');
+      setParsedReminder(null);
       setOpen(false);
     }
   };
@@ -72,6 +92,13 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
     setTempSelectedReminder(undefined);
     onSelect(undefined);
     setOpen(false);
+  };
+
+  const handleDeleteCustomReminder = (reminderValue: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const updatedRecents = recentCustomReminders.filter(r => r.value !== reminderValue);
+    setRecentCustomReminders(updatedRecents);
+    localStorage.setItem('kario-custom-reminders', JSON.stringify(updatedRecents));
   };
 
   const getDisplayLabel = (value: string | undefined) => {
@@ -133,14 +160,16 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               onChange={(e) => setCustomInput(e.target.value)}
               placeholder="type reminder (e.g., 10 minutes, 2 hours)"
               className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
-              disabled={!selectedDate}
+              disabled={!selectedDate || !selectedTime}
             />
-            {!selectedDate && (
-              <p className="text-xs text-gray-500 mt-1">Please select a date first</p>
+            {(!selectedDate || !selectedTime) && (
+              <p className="text-xs text-gray-500 mt-1">
+                {!selectedDate ? 'Please select a date first' : 'Please select a time first'}
+              </p>
             )}
           </div>
 
-          {parsedReminder && selectedDate && (
+          {parsedReminder && selectedDate && selectedTime && (
             <div className="px-3 pb-3">
               <Button
                 onClick={handleApplyCustom}
@@ -152,12 +181,42 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
             </div>
           )}
 
+          {/* Recent Custom Reminders */}
+          {recentCustomReminders.length > 0 && (
+            <div className="px-3 pb-3 space-y-2">
+              <div className="text-xs text-gray-500 mb-2">Recent Custom</div>
+              {recentCustomReminders.map((customRem, index) => (
+                <div key={index} className="relative group">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleReminderSelect(customRem.value)}
+                    disabled={!selectedDate || !selectedTime}
+                    className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Bell className="h-4 w-4 mr-2" />
+                    {customRem.label}
+                  </Button>
+                  <button
+                    onClick={(e) => handleDeleteCustomReminder(customRem.value, e)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 hover:bg-red-500/20 rounded-md"
+                  >
+                    <X className="h-3.5 w-3.5 text-red-400" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="p-3 space-y-2">
+            {recentCustomReminders.length > 0 && (
+              <div className="text-xs text-gray-500 mb-2">Default Reminders</div>
+            )}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleReminderSelect('at-time')}
-              disabled={!selectedDate}
+              disabled={!selectedDate || !selectedTime}
               className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Bell className="h-4 w-4 mr-2" />
@@ -167,7 +226,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               variant="ghost"
               size="sm"
               onClick={() => handleReminderSelect('10m')}
-              disabled={!selectedDate}
+              disabled={!selectedDate || !selectedTime}
               className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Bell className="h-4 w-4 mr-2" />
@@ -177,7 +236,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               variant="ghost"
               size="sm"
               onClick={() => handleReminderSelect('30m')}
-              disabled={!selectedDate}
+              disabled={!selectedDate || !selectedTime}
               className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Bell className="h-4 w-4 mr-2" />
@@ -187,7 +246,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               variant="ghost"
               size="sm"
               onClick={() => handleReminderSelect('1h')}
-              disabled={!selectedDate}
+              disabled={!selectedDate || !selectedTime}
               className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Bell className="h-4 w-4 mr-2" />
