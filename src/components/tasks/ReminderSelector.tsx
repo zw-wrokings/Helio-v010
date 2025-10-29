@@ -31,6 +31,38 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
 
     const normalizedInput = input.toLowerCase().trim();
 
+    // Check for exact time format (e.g., "3pm", "14:30", "3:30pm")
+    const timePatterns = [
+      /^(\d{1,2})[:|\ ](\d{1,2})\s*(am|pm)$/i,
+      /^(\d{1,2})\s*(am|pm)$/i,
+      /^(\d{1,2})[:|\ ](\d{1,2})$/i,
+    ];
+
+    for (const pattern of timePatterns) {
+      const match = normalizedInput.match(pattern);
+      if (match) {
+        let hours = parseInt(match[1]);
+        let minutes = match[2] && !['am', 'pm'].includes(match[2].toLowerCase()) ? parseInt(match[2]) : 0;
+        let period = match[3] || (match[2] && ['am', 'pm'].includes(match[2].toLowerCase()) ? match[2] : null);
+
+        if (period && typeof period === 'string' && (period.toLowerCase() === 'am' || period.toLowerCase() === 'pm')) {
+          if (period.toLowerCase() === 'pm' && hours !== 12) {
+            hours += 12;
+          } else if (period.toLowerCase() === 'am' && hours === 12) {
+            hours = 0;
+          }
+        }
+
+        if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+          const time24 = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+          return `at:${time24}`;
+        }
+      }
+    }
+
+    // Check if it contains "after"
+    const isAfter = normalizedInput.includes('after');
+
     const patterns = [
       { regex: /(\d+)\s*minute/i, unit: 'minutes' },
       { regex: /(\d+)\s*min/i, unit: 'minutes' },
@@ -47,7 +79,8 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
       const match = normalizedInput.match(regex);
       if (match) {
         const value = match[1];
-        return `${value}${unit.charAt(0)}`;
+        const prefix = isAfter ? '+' : '';
+        return `${prefix}${value}${unit.charAt(0)}`;
       }
     }
 
@@ -108,7 +141,21 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
       return 'At time of task';
     }
 
-    const match = value.match(/^(\d+)([mhdws])/);
+    // Check for exact time format (at:HH:MM)
+    if (value.startsWith('at:')) {
+      const time24 = value.substring(3);
+      const [hours24Str, minutes] = time24.split(':');
+      const hours24 = parseInt(hours24Str);
+      const displayHours = hours24 === 0 ? 12 : hours24 > 12 ? hours24 - 12 : hours24;
+      const displayPeriod = hours24 >= 12 ? 'PM' : 'AM';
+      return `At ${displayHours}:${minutes} ${displayPeriod}`;
+    }
+
+    // Check for "after" reminders (starts with +)
+    const isAfter = value.startsWith('+');
+    const cleanValue = isAfter ? value.substring(1) : value;
+
+    const match = cleanValue.match(/^(\d+)([mhdws])/);
     if (match) {
       const num = match[1];
       const unit = match[2];
@@ -119,7 +166,8 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
         'w': 'week',
         's': 'sec',
       };
-      return `${num} ${unitMap[unit]}${parseInt(num) > 1 ? 's' : ''} before`;
+      const suffix = isAfter ? 'after' : 'before';
+      return `${num} ${unitMap[unit]}${parseInt(num) > 1 ? 's' : ''} ${suffix}`;
     }
 
     return value;
@@ -158,7 +206,7 @@ const ReminderSelector: React.FC<ReminderSelectorProps> = ({ selectedReminder, o
               type="text"
               value={customInput}
               onChange={(e) => setCustomInput(e.target.value)}
-              placeholder="type reminder (e.g., 10 minutes, 2 hours)"
+              placeholder="e.g., 1 day after, 3pm, 10 minutes before"
               className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
               disabled={!selectedDate || !selectedTime}
             />
