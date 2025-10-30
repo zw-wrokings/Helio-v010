@@ -4,7 +4,7 @@ import DateSelector from '@/components/tasks/DateSelector';
 import PrioritySelector from '@/components/tasks/PrioritySelector';
 import ReminderSelector from '@/components/tasks/ReminderSelector';
 import LabelSelector from '@/components/tasks/LabelSelector';
-import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, Link, Clock } from 'lucide-react';
+import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, Link } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -319,10 +319,6 @@ const Tasks = () => {
                           <Link className="h-4 w-4 mr-2" />
                           Link
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
-                          <Clock className="h-4 w-4 mr-2" />
-                          Deadline
-                        </Button>
                       </div>
 
                       {/* Main Action Buttons on Right */}
@@ -348,7 +344,12 @@ const Tasks = () => {
                         <Button
                           onClick={handleAddTask}
                           size="sm"
-                          className="border border-[#252232] bg-white text-[#252232] rounded-[14px] hover:bg-white hover:text-[#252232]"
+                          disabled={!newTaskTitle.trim()}
+                          className={`border rounded-[14px] transition-all ${
+                            newTaskTitle.trim()
+                              ? 'border-[#252232] bg-white text-[#252232] hover:bg-white hover:text-[#252232]'
+                              : 'border-[#3a3a3a] bg-[#2a2a2a] text-[#5a5a5a] cursor-not-allowed'
+                          }`}
                         >
                           Save
                         </Button>
