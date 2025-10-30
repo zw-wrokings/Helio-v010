@@ -402,23 +402,30 @@ const Tasks = () => {
       {/* Context Menu */}
       {contextMenu && (
         <div
-          className="fixed bg-[#1b1b1b] border border-[#414141] rounded-lg shadow-lg py-1 z-50"
-          style={{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }}
+          className="fixed shadow-xl py-2 px-2 z-50"
+          style={{
+            left: `${contextMenu.x}px`,
+            top: `${contextMenu.y}px`,
+            borderRadius: '16px',
+            background: '#1f1f1f',
+            width: '180px',
+            border: 'none'
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           <button
-            className="w-full px-4 py-2 text-left text-white hover:bg-[#313133] flex items-center gap-2 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-left text-white transition-all text-sm my-1 rounded-xl hover:border hover:border-[#3b3a3a] hover:bg-[#1f1f1f]"
             onClick={() => handleEditTask(contextMenu.taskId)}
           >
-            <Edit className="h-4 w-4" />
-            Edit
+            <Edit className="w-4 h-4" />
+            <span>Edit</span>
           </button>
           <button
-            className="w-full px-4 py-2 text-left text-red-400 hover:bg-[#313133] flex items-center gap-2 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 text-left text-white transition-all text-sm my-1 rounded-xl hover:border hover:border-[#3b3a3a] hover:bg-[#1f1f1f]"
             onClick={() => handleDeleteTask(contextMenu.taskId)}
           >
-            <Trash2 className="h-4 w-4" />
-            Delete
+            <Trash2 className="w-4 h-4" />
+            <span>Delete</span>
           </button>
         </div>
       )}
