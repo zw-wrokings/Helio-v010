@@ -21,6 +21,10 @@ const DeadlineSelector: React.FC<DeadlineSelectorProps> = ({ selectedDeadline, o
   const [tempSelectedDeadline, setTempSelectedDeadline] = useState<string | undefined>(selectedDeadline);
   const [customInput, setCustomInput] = useState('');
   const [parsedDeadline, setParsedDeadline] = useState<string | null>(null);
+  const [recentCustomDeadlines, setRecentCustomDeadlines] = useState<CustomDeadlineData[]>(() => {
+    const saved = localStorage.getItem('kario-custom-deadlines');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const parseDeadlineInput = (input: string): string | null => {
     if (!input.trim()) return null;
@@ -92,12 +96,28 @@ const DeadlineSelector: React.FC<DeadlineSelectorProps> = ({ selectedDeadline, o
 
   const handleApplyCustom = () => {
     if (parsedDeadline && selectedDate && selectedTime) {
+      const newCustomDeadline: CustomDeadlineData = {
+        value: parsedDeadline,
+        label: getDisplayLabel(parsedDeadline)
+      };
+
+      const updatedRecents = [newCustomDeadline, ...recentCustomDeadlines.filter(d => d.value !== parsedDeadline)].slice(0, 10);
+      setRecentCustomDeadlines(updatedRecents);
+      localStorage.setItem('kario-custom-deadlines', JSON.stringify(updatedRecents));
+
       setTempSelectedDeadline(parsedDeadline);
       onSelect(parsedDeadline);
       setCustomInput('');
       setParsedDeadline(null);
       setOpen(false);
     }
+  };
+
+  const handleDeleteCustomDeadline = (deadlineValue: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const updatedRecents = recentCustomDeadlines.filter(d => d.value !== deadlineValue);
+    setRecentCustomDeadlines(updatedRecents);
+    localStorage.setItem('kario-custom-deadlines', JSON.stringify(updatedRecents));
   };
 
   const handleClearDeadline = (e: React.MouseEvent) => {
@@ -195,7 +215,36 @@ const DeadlineSelector: React.FC<DeadlineSelectorProps> = ({ selectedDeadline, o
             </div>
           )}
 
+          {recentCustomDeadlines.length > 0 && (
+            <div className="px-3 pb-3 space-y-2">
+              <div className="text-xs text-gray-500 mb-2">Recent Custom</div>
+              {recentCustomDeadlines.map((customDead, index) => (
+                <div key={index} className="relative group">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeadlineSelect(customDead.value)}
+                    disabled={!selectedDate || !selectedTime}
+                    className="w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Clock className="h-4 w-4 mr-2" />
+                    {customDead.label}
+                  </Button>
+                  <button
+                    onClick={(e) => handleDeleteCustomDeadline(customDead.value, e)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 hover:bg-red-500/20 rounded-md"
+                  >
+                    <X className="h-3.5 w-3.5 text-red-400" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="p-3 space-y-2">
+            {recentCustomDeadlines.length > 0 && (
+              <div className="text-xs text-gray-500 mb-2">Preset Deadlines</div>
+            )}
             <Button
               variant="ghost"
               size="sm"
