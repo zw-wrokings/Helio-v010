@@ -21,6 +21,26 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
     const saved = localStorage.getItem('kario-labels');
     return saved ? JSON.parse(saved) : [];
   });
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string>('text-blue-500');
+
+  const colorOptions = [
+    { name: 'red', class: 'text-red-500' },
+    { name: 'orange', class: 'text-orange-500' },
+    { name: 'amber', class: 'text-amber-500' },
+    { name: 'yellow', class: 'text-yellow-500' },
+    { name: 'lime', class: 'text-lime-500' },
+    { name: 'green', class: 'text-green-500' },
+    { name: 'emerald', class: 'text-emerald-500' },
+    { name: 'teal', class: 'text-teal-500' },
+    { name: 'cyan', class: 'text-cyan-500' },
+    { name: 'sky', class: 'text-sky-500' },
+    { name: 'blue', class: 'text-blue-500' },
+    { name: 'pink', class: 'text-pink-500' },
+    { name: 'rose', class: 'text-rose-500' },
+    { name: 'slate', class: 'text-slate-400' },
+    { name: 'gray', class: 'text-gray-400' },
+  ];
 
   const presetLabels: LabelData[] = [
     { name: '#ByKairo', color: 'text-blue-500' },
@@ -36,10 +56,10 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
   ];
 
   const handleCreateLabel = () => {
-    if (inputValue.trim() && inputValue.length <= 20) {
+    if (inputValue.trim() && inputValue.length <= 27 && selectedLabels.length < 3) {
       const newLabel: LabelData = {
         name: inputValue.trim(),
-        color: 'text-blue-500'
+        color: selectedColor
       };
 
       const labelExists = availableLabels.find(l => l.name.toLowerCase() === newLabel.name.toLowerCase());
@@ -55,6 +75,7 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
       }
 
       setInputValue('');
+      setSelectedColor('text-blue-500');
     }
   };
 
@@ -62,7 +83,9 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
     if (selectedLabels.includes(labelName)) {
       onSelect(selectedLabels.filter(l => l !== labelName));
     } else {
-      onSelect([...selectedLabels, labelName]);
+      if (selectedLabels.length < 3) {
+        onSelect([...selectedLabels, labelName]);
+      }
     }
   };
 
@@ -79,7 +102,7 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value.length <= 20) {
+    if (value.length <= 27) {
       setInputValue(value);
     }
   };
@@ -121,15 +144,45 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
       >
         <div className="flex flex-col">
           <div className="p-3">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
-              placeholder="create a label"
-              className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
-              maxLength={20}
-            />
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                onKeyPress={handleKeyPress}
+                placeholder="create a label"
+                className="flex-1 bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
+                maxLength={27}
+              />
+              {inputValue.trim() && (
+                <Popover open={colorPickerOpen} onOpenChange={setColorPickerOpen}>
+                  <PopoverTrigger asChild>
+                    <Tag
+                      className={cn("h-5 w-5 cursor-pointer transition-all hover:scale-110", selectedColor)}
+                    />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto p-4 bg-[#252525] border border-[#414141] rounded-lg"
+                    align="start"
+                    side="right"
+                    sideOffset={10}
+                  >
+                    <div className="grid grid-cols-3 gap-3">
+                      {colorOptions.map((color) => (
+                        <Tag
+                          key={color.name}
+                          className={cn("h-8 w-8 cursor-pointer hover:scale-125 transition-all", color.class)}
+                          onClick={() => {
+                            setSelectedColor(color.class);
+                            setColorPickerOpen(false);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
           </div>
 
           {inputValue.trim() && (
@@ -137,7 +190,8 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
               <Button
                 onClick={handleCreateLabel}
                 size="sm"
-                className="w-full bg-[#252525] text-white hover:bg-[#2e2e2e] border border-[#414141] rounded-[10px] h-9 text-sm"
+                disabled={selectedLabels.length >= 3}
+                className="w-full bg-[#252525] text-white hover:bg-[#2e2e2e] border border-[#414141] rounded-[10px] h-9 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Create: {inputValue}
               </Button>
@@ -153,15 +207,16 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
                     variant="ghost"
                     size="sm"
                     onClick={() => handleToggleLabel(label.name)}
+                    disabled={!selectedLabels.includes(label.name) && selectedLabels.length >= 3}
                     className={cn(
-                      "w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200",
+                      "w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
                       selectedLabels.includes(label.name) && "bg-[#2e2e2e] text-white"
                     )}
                   >
                     <Tag className={cn("h-4 w-4 mr-2", label.color)} />
                     {label.name}
                     {selectedLabels.includes(label.name) && (
-                      <span className="ml-auto text-green-400">✓</span>
+                      <span className="ml-auto text-green-400 group-hover:hidden">✓</span>
                     )}
                   </Button>
                   <button
@@ -185,8 +240,9 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
                 variant="ghost"
                 size="sm"
                 onClick={() => handleToggleLabel(preset.name)}
+                disabled={!selectedLabels.includes(preset.name) && selectedLabels.length >= 3}
                 className={cn(
-                  "w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200",
+                  "w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
                   selectedLabels.includes(preset.name) && "bg-[#2e2e2e] text-white"
                 )}
               >
