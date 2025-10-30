@@ -268,7 +268,7 @@ const Tasks = () => {
               
                 {/* Add New Task Input */}
                 {isAddingTask && (
-                  <div className="p-4 bg-transparent border border-[#525252] rounded-[20px] min-h-[160px] relative z-10 overflow-visible">
+                  <div className="p-4 bg-transparent border border-[#525252] rounded-[20px] min-h-[160px] relative z-10 overflow-visible mt-4">
                     {/* Section 1: Title */}
                     <div className="mb-2">
                       <Input
