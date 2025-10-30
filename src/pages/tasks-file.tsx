@@ -38,6 +38,8 @@ const Tasks = () => {
   const [selectedReminder, setSelectedReminder] = useState<string | undefined>();
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; taskId: string } | null>(null);
+  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [dragOverTaskId, setDragOverTaskId] = useState<string | null>(null);
 
   // Calculate task statistics
   const totalTasks = tasks.length;
@@ -144,6 +146,47 @@ const Tasks = () => {
     return () => document.removeEventListener('click', handleClick);
   }, []);
 
+  const handleDragStart = (e: React.DragEvent, taskId: string) => {
+    setDraggedTaskId(taskId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, taskId: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverTaskId(taskId);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverTaskId(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, dropTaskId: string) => {
+    e.preventDefault();
+    if (!draggedTaskId || draggedTaskId === dropTaskId) {
+      setDraggedTaskId(null);
+      setDragOverTaskId(null);
+      return;
+    }
+
+    const draggedIndex = tasks.findIndex(task => task.id === draggedTaskId);
+    const dropIndex = tasks.findIndex(task => task.id === dropTaskId);
+
+    const newTasks = [...tasks];
+    const [draggedTask] = newTasks.splice(draggedIndex, 1);
+    newTasks.splice(dropIndex, 0, draggedTask);
+
+    setTasks(newTasks);
+    localStorage.setItem('kario-tasks', JSON.stringify(newTasks));
+    setDraggedTaskId(null);
+    setDragOverTaskId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTaskId(null);
+    setDragOverTaskId(null);
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#161618]">
       <TasksHeader
@@ -237,9 +280,19 @@ const Tasks = () => {
                       {tasks.map((task) => (
                         <TableRow
                           key={task.id}
-                          className="border-b border-[#414141] hover:bg-[#313133] cursor-pointer bg-transparent"
+                          className={`border-b border-[#414141] hover:bg-[#313133] cursor-move bg-transparent transition-all ${
+                            draggedTaskId === task.id ? 'opacity-50' : ''
+                          } ${
+                            dragOverTaskId === task.id ? 'border-t-2 border-t-blue-500' : ''
+                          }`}
                           onClick={() => handleToggleTask(task.id)}
                           onContextMenu={(e) => handleContextMenu(e, task.id)}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, task.id)}
+                          onDragOver={(e) => handleDragOver(e, task.id)}
+                          onDragLeave={handleDragLeave}
+                          onDrop={(e) => handleDrop(e, task.id)}
+                          onDragEnd={handleDragEnd}
                         >
                           <TableCell className={`${
                             task.completed ? 'text-gray-400 line-through' : 'text-white'
