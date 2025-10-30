@@ -4,6 +4,7 @@ import DateSelector from '@/components/tasks/DateSelector';
 import PrioritySelector from '@/components/tasks/PrioritySelector';
 import ReminderSelector from '@/components/tasks/ReminderSelector';
 import LabelSelector from '@/components/tasks/LabelSelector';
+import DeadlineSelector from '@/components/tasks/DeadlineSelector';
 import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, Link, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,7 @@ interface Task {
   description: string;
   reminder?: string;
   labels?: string[];
+  deadline?: string;
 }
 
 const Tasks = () => {
@@ -37,6 +39,7 @@ const Tasks = () => {
   const [selectedPriority, setSelectedPriority] = useState<string>('Priority 3');
   const [selectedReminder, setSelectedReminder] = useState<string | undefined>();
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
+  const [selectedDeadline, setSelectedDeadline] = useState<string | undefined>();
 
   // Calculate task statistics
   const totalTasks = tasks.length;
@@ -89,7 +92,8 @@ const Tasks = () => {
         priority: selectedPriority,
         description: '',
         reminder: selectedReminder,
-        labels: selectedLabels
+        labels: selectedLabels,
+        deadline: selectedDeadline
       };
       const updatedTasks = [...tasks, newTask];
       setTasks(updatedTasks);
@@ -100,6 +104,7 @@ const Tasks = () => {
       setSelectedPriority('Priority 3');
       setSelectedReminder(undefined);
       setSelectedLabels([]);
+      setSelectedDeadline(undefined);
       setIsAddingTask(false);
     }
   };
@@ -319,10 +324,12 @@ const Tasks = () => {
                           <Link className="h-4 w-4 mr-2" />
                           Link
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white hover:border hover:border-[#252232] hover:bg-[#1e1e1f] hover:rounded-[8px] px-3 py-1 h-8 whitespace-nowrap transition-all duration-200 border border-transparent">
-                          <Clock className="h-4 w-4 mr-2" />
-                          Deadline
-                        </Button>
+                        <DeadlineSelector
+                          selectedDeadline={selectedDeadline}
+                          onSelect={setSelectedDeadline}
+                          selectedDate={selectedDate}
+                          selectedTime={selectedTime}
+                        />
                       </div>
 
                       {/* Main Action Buttons on Right */}
