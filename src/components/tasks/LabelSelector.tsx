@@ -21,36 +21,25 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
     const saved = localStorage.getItem('kario-labels');
     return saved ? JSON.parse(saved) : [];
   });
-  const [colorPickerOpen, setColorPickerOpen] = useState(false);
-  const [selectedColor, setSelectedColor] = useState<string>('text-blue-500');
 
-  const colorOptions = [
-    { name: 'red', class: 'text-red-500' },
-    { name: 'orange', class: 'text-orange-500' },
-    { name: 'amber', class: 'text-amber-500' },
-    { name: 'yellow', class: 'text-yellow-500' },
-    { name: 'lime', class: 'text-lime-500' },
-    { name: 'green', class: 'text-green-500' },
-    { name: 'emerald', class: 'text-emerald-500' },
-    { name: 'teal', class: 'text-teal-500' },
-    { name: 'cyan', class: 'text-cyan-500' },
-    { name: 'sky', class: 'text-sky-500' },
-    { name: 'blue', class: 'text-blue-500' },
-    { name: 'indigo', class: 'text-indigo-500' },
-    { name: 'violet', class: 'text-violet-500' },
-    { name: 'purple', class: 'text-purple-500' },
-    { name: 'fuchsia', class: 'text-fuchsia-500' },
-    { name: 'pink', class: 'text-pink-500' },
-    { name: 'rose', class: 'text-rose-500' },
-    { name: 'slate', class: 'text-slate-400' },
-    { name: 'gray', class: 'text-gray-400' },
+  const presetLabels: LabelData[] = [
+    { name: '#ByKairo', color: 'text-blue-500' },
+    { name: '#School', color: 'text-green-500' },
+    { name: '#Work', color: 'text-orange-500' },
+    { name: '#Personal', color: 'text-pink-500' },
+    { name: '#Urgent', color: 'text-red-500' },
+    { name: '#Shopping', color: 'text-cyan-500' },
+    { name: '#Health', color: 'text-emerald-500' },
+    { name: '#Finance', color: 'text-amber-500' },
+    { name: '#Family', color: 'text-rose-500' },
+    { name: '#Projects', color: 'text-teal-500' },
   ];
 
   const handleCreateLabel = () => {
     if (inputValue.trim() && inputValue.length <= 20) {
       const newLabel: LabelData = {
         name: inputValue.trim(),
-        color: selectedColor
+        color: 'text-blue-500'
       };
 
       const labelExists = availableLabels.find(l => l.name.toLowerCase() === newLabel.name.toLowerCase());
@@ -66,7 +55,6 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
       }
 
       setInputValue('');
-      setSelectedColor('text-blue-500');
     }
   };
 
@@ -104,7 +92,10 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
 
   const getLabelColor = (labelName: string): string => {
     const label = availableLabels.find(l => l.name === labelName);
-    return label?.color || 'text-gray-400';
+    if (label) return label.color;
+
+    const preset = presetLabels.find(l => l.name === labelName);
+    return preset?.color || 'text-gray-400';
   };
 
   return (
@@ -123,70 +114,39 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[280px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
+        className="w-[300px] p-0 bg-[#1b1b1b] border border-[#414141] rounded-[12px] overflow-hidden flex flex-col"
         align="start"
         side="right"
         sideOffset={8}
       >
         <div className="flex flex-col">
-          {/* Input Field with Color Picker */}
-          <div className="p-3 border-b border-[#414141]">
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
-                placeholder="create a label"
-                className="flex-1 bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
-                maxLength={20}
-              />
-              {inputValue.trim() && (
-                <Popover open={colorPickerOpen} onOpenChange={setColorPickerOpen}>
-                  <PopoverTrigger asChild>
-                    <Tag
-                      className={cn("h-5 w-5 cursor-pointer transition-all hover:scale-110", selectedColor)}
-                    />
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto p-4 bg-[#252525] border border-[#414141] rounded-lg"
-                    align="start"
-                    side="right"
-                    sideOffset={10}
-                  >
-                    <div className="grid grid-cols-4 gap-3">
-                      {colorOptions.map((color) => (
-                        <Tag
-                          key={color.name}
-                          className={cn("h-8 w-8 cursor-pointer hover:scale-125 transition-all", color.class)}
-                          onClick={() => {
-                            setSelectedColor(color.class);
-                            setColorPickerOpen(false);
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              )}
-            </div>
-            {inputValue.trim() && (
-              <div className="mt-2">
-                <Button
-                  onClick={handleCreateLabel}
-                  size="sm"
-                  className="w-full bg-[#252525] text-white hover:bg-[#2e2e2e] border border-[#414141] rounded-[10px] h-8 text-sm"
-                >
-                  Create & Add Label
-                </Button>
-              </div>
-            )}
+          <div className="p-3">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+              placeholder="create a label"
+              className="w-full bg-transparent text-white text-sm px-0 py-2 outline-none placeholder-gray-500 border-none"
+              maxLength={20}
+            />
           </div>
 
-          {/* Available Labels */}
+          {inputValue.trim() && (
+            <div className="px-3 pb-3">
+              <Button
+                onClick={handleCreateLabel}
+                size="sm"
+                className="w-full bg-[#252525] text-white hover:bg-[#2e2e2e] border border-[#414141] rounded-[10px] h-9 text-sm"
+              >
+                Create: {inputValue}
+              </Button>
+            </div>
+          )}
+
           {availableLabels.length > 0 && (
-            <div className="p-3 space-y-2 max-h-[300px] overflow-y-auto">
-              <div className="text-xs text-gray-500 mb-2">Available Labels</div>
+            <div className="px-3 pb-3 space-y-2">
+              <div className="text-xs text-gray-500 mb-2">Custom Labels</div>
               {availableLabels.map((label, index) => (
                 <div key={index} className="relative group">
                   <Button
@@ -194,10 +154,8 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
                     size="sm"
                     onClick={() => handleToggleLabel(label.name)}
                     className={cn(
-                      "w-full justify-start text-left border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200",
-                      selectedLabels.includes(label.name)
-                        ? "bg-[#2e2e2e] text-white"
-                        : "bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white"
+                      "w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200",
+                      selectedLabels.includes(label.name) && "bg-[#2e2e2e] text-white"
                     )}
                   >
                     <Tag className={cn("h-4 w-4 mr-2", label.color)} />
@@ -217,14 +175,29 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
             </div>
           )}
 
-          {/* Empty State */}
-          {availableLabels.length === 0 && (
-            <div className="p-8 text-center">
-              <Tag className="h-12 w-12 text-gray-600 mx-auto mb-3" />
-              <p className="text-sm text-gray-500">No labels yet</p>
-              <p className="text-xs text-gray-600 mt-1">Create your first label above</p>
-            </div>
-          )}
+          <div className="p-3 space-y-2">
+            {availableLabels.length > 0 && (
+              <div className="text-xs text-gray-500 mb-2">Preset Labels</div>
+            )}
+            {presetLabels.map((preset, index) => (
+              <Button
+                key={index}
+                variant="ghost"
+                size="sm"
+                onClick={() => handleToggleLabel(preset.name)}
+                className={cn(
+                  "w-full justify-start text-left bg-[#252525] text-gray-300 hover:bg-[#2e2e2e] hover:text-white border border-[#414141] rounded-[15px] h-9 text-xs transition-all duration-200",
+                  selectedLabels.includes(preset.name) && "bg-[#2e2e2e] text-white"
+                )}
+              >
+                <Tag className={cn("h-4 w-4 mr-2", preset.color)} />
+                {preset.name}
+                {selectedLabels.includes(preset.name) && (
+                  <span className="ml-auto text-green-400">✓</span>
+                )}
+              </Button>
+            ))}
+          </div>
         </div>
       </PopoverContent>
     </Popover>
