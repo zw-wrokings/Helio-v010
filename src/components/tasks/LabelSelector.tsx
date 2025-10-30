@@ -121,6 +121,12 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
     return preset?.color || 'text-gray-400';
   };
 
+  const getButtonIconColor = (): string => {
+    if (selectedLabels.length === 0) return 'text-gray-400';
+    const lastSelectedLabel = selectedLabels[selectedLabels.length - 1];
+    return getLabelColor(lastSelectedLabel);
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -132,7 +138,7 @@ const LabelSelector: React.FC<LabelSelectorProps> = ({ selectedLabels, onSelect 
             selectedLabels.length > 0 && "text-white border-[#252232] bg-[#1e1e1f] rounded-[8px]"
           )}
         >
-          <Tag className="h-4 w-4 mr-2" />
+          <Tag className={cn("h-4 w-4 mr-2", getButtonIconColor())} />
           {selectedLabels.length > 0 ? `${selectedLabels.length} Label${selectedLabels.length > 1 ? 's' : ''}` : 'Label'}
         </Button>
       </PopoverTrigger>
