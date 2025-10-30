@@ -4,7 +4,7 @@ import DateSelector from '@/components/tasks/DateSelector';
 import PrioritySelector from '@/components/tasks/PrioritySelector';
 import ReminderSelector from '@/components/tasks/ReminderSelector';
 import LabelSelector from '@/components/tasks/LabelSelector';
-import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, Link } from 'lucide-react';
+import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, Link, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -37,6 +37,7 @@ const Tasks = () => {
   const [selectedPriority, setSelectedPriority] = useState<string>('Priority 3');
   const [selectedReminder, setSelectedReminder] = useState<string | undefined>();
   const [selectedLabels, setSelectedLabels] = useState<string[]>([]);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; taskId: string } | null>(null);
 
   // Calculate task statistics
   const totalTasks = tasks.length;
@@ -120,6 +121,28 @@ const Tasks = () => {
       setNewTaskTitle('');
     }
   };
+
+  const handleContextMenu = (e: React.MouseEvent, taskId: string) => {
+    e.preventDefault();
+    setContextMenu({ x: e.clientX, y: e.clientY, taskId });
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    const updatedTasks = tasks.filter(task => task.id !== taskId);
+    setTasks(updatedTasks);
+    localStorage.setItem('kario-tasks', JSON.stringify(updatedTasks));
+    setContextMenu(null);
+  };
+
+  const handleEditTask = (taskId: string) => {
+    setContextMenu(null);
+  };
+
+  React.useEffect(() => {
+    const handleClick = () => setContextMenu(null);
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);
 
   return (
     <div className="min-h-screen w-full bg-[#161618]">
@@ -212,10 +235,11 @@ const Tasks = () => {
                     </TableHeader>
                     <TableBody>
                       {tasks.map((task) => (
-                        <TableRow 
-                          key={task.id} 
+                        <TableRow
+                          key={task.id}
                           className="border-b border-[#414141] hover:bg-[#313133] cursor-pointer bg-transparent"
                           onClick={() => handleToggleTask(task.id)}
+                          onContextMenu={(e) => handleContextMenu(e, task.id)}
                         >
                           <TableCell className={`${
                             task.completed ? 'text-gray-400 line-through' : 'text-white'
@@ -372,6 +396,30 @@ const Tasks = () => {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <div
+          className="fixed bg-[#1b1b1b] border border-[#414141] rounded-lg shadow-lg py-1 z-50"
+          style={{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className="w-full px-4 py-2 text-left text-white hover:bg-[#313133] flex items-center gap-2 transition-colors"
+            onClick={() => handleEditTask(contextMenu.taskId)}
+          >
+            <Edit className="h-4 w-4" />
+            Edit
+          </button>
+          <button
+            className="w-full px-4 py-2 text-left text-red-400 hover:bg-[#313133] flex items-center gap-2 transition-colors"
+            onClick={() => handleDeleteTask(contextMenu.taskId)}
+          >
+            <Trash2 className="h-4 w-4" />
+            Delete
+          </button>
         </div>
       )}
     </div>
