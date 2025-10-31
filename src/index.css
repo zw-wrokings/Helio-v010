@@ -232,3 +232,22 @@
     opacity: 1;
   }
 }
+
+/* Fast tooltip styling */
+[data-radix-tooltip-content] {
+  background-color: #1f1f1f !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 8px 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+  animation-delay: 100ms !important;
+}
+
+[data-radix-tooltip-content] p {
+  color: #ffffff;
+  font-size: 0.875rem;
+}
+
+[data-state="delayed-open"][data-radix-tooltip-content] {
+  animation-duration: 100ms !important;
+}

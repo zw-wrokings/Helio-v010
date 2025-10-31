@@ -311,12 +311,12 @@ const Tasks = () => {
                                 }}
                               >
                               </div>
-                              <TooltipProvider>
+                              <TooltipProvider delayDuration={100}>
                                 <Tooltip>
                                   <TooltipTrigger asChild>
-                                    <span className="truncate max-w-xs">{task.title}</span>
+                                    <span className="truncate max-w-[150px]">{task.title}</span>
                                   </TooltipTrigger>
-                                  <TooltipContent side="right">
+                                  <TooltipContent side="right" className="bg-[#1f1f1f] text-white rounded-xl border-0">
                                     <p className="max-w-sm">{task.title}</p>
                                   </TooltipContent>
                                 </Tooltip>
@@ -324,12 +324,12 @@ const Tasks = () => {
                             </div>
                           </TableCell>
                           <TableCell className="text-gray-300">
-                            <TooltipProvider>
+                            <TooltipProvider delayDuration={100}>
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                                  <span className="truncate max-w-xs block">{task.description || 'No description'}</span>
+                                  <span className="truncate max-w-[150px] block">{task.description || 'No description'}</span>
                                 </TooltipTrigger>
-                                <TooltipContent side="right">
+                                <TooltipContent side="right" className="bg-[#1f1f1f] text-white rounded-xl border-0">
                                   <p className="max-w-sm">{task.description || 'No description'}</p>
                                 </TooltipContent>
                               </Tooltip>
