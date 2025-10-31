@@ -280,8 +280,8 @@ const Tasks = () => {
                       {tasks.map((task) => (
                         <TableRow
                           key={task.id}
-                          className={`border-b border-[#414141] hover:bg-[#313133] cursor-move bg-transparent transition-all ${
-                            draggedTaskId === task.id ? 'opacity-50' : ''
+                          className={`border-b border-[#414141] hover:bg-[#313133] bg-transparent transition-all ${
+                            draggedTaskId === task.id ? 'opacity-50 cursor-grabbing' : 'cursor-grab hover:cursor-grab'
                           } ${
                             dragOverTaskId === task.id ? 'border-t-2 border-t-blue-500' : ''
                           }`}
