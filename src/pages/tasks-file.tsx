@@ -5,6 +5,7 @@ import PrioritySelector from '@/components/tasks/PrioritySelector';
 import ReminderSelector from '@/components/tasks/ReminderSelector';
 import LabelSelector from '@/components/tasks/LabelSelector';
 import { Plus, CircleCheck as CheckCircle, ChevronRight, MoveVertical as MoreVertical, FileText, AlignLeft, Calendar, Flag, Bell, Tag, Link, Edit, Trash2 } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -298,10 +299,10 @@ const Tasks = () => {
                             task.completed ? 'text-gray-400 line-through' : 'text-white'
                           }`}>
                             <div className="flex items-center gap-3">
-                              <div 
+                              <div
                                 className={`w-4 h-4 border-2 rounded-full cursor-pointer transition-colors ${
-                                  task.completed 
-                                    ? 'bg-white border-white' 
+                                  task.completed
+                                    ? 'bg-white border-white'
                                     : 'border-gray-400 hover:border-gray-300'
                                 }`}
                                 onClick={(e) => {
@@ -310,10 +311,30 @@ const Tasks = () => {
                                 }}
                               >
                               </div>
-                              {task.title}
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <span className="truncate max-w-xs">{task.title}</span>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="right">
+                                    <p className="max-w-sm">{task.title}</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                             </div>
                           </TableCell>
-                          <TableCell className="text-gray-300">{task.description || 'No description'}</TableCell>
+                          <TableCell className="text-gray-300">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span className="truncate max-w-xs block">{task.description || 'No description'}</span>
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                  <p className="max-w-sm">{task.description || 'No description'}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </TableCell>
                           <TableCell className="text-white">{task.creationDate}</TableCell>
                           <TableCell>
                             {(() => {
